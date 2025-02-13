@@ -243,10 +243,22 @@
     <WindowState>Normal</WindowState>
   </DialogSettings>
   <DialogSettings>
+    <Visible>false</Visible>
+    <Location>
+      <X>0</X>
+      <Y>0</Y>
+    </Location>
+    <Size>
+      <Width>0</Width>
+      <Height>0</Height>
+    </Size>
+    <WindowState>Normal</WindowState>
+  </DialogSettings>
+  <DialogSettings>
     <Visible>true</Visible>
     <Location>
-      <X>854</X>
-      <Y>117</Y>
+      <X>1190</X>
+      <Y>257</Y>
     </Location>
     <Size>
       <Width>416</Width>
@@ -374,8 +386,8 @@
   <DialogSettings>
     <Visible>true</Visible>
     <Location>
-      <X>1264</X>
-      <Y>116</Y>
+      <X>1810</X>
+      <Y>567</Y>
     </Location>
     <Size>
       <Width>416</Width>
@@ -491,8 +503,8 @@
   <DialogSettings>
     <Visible>true</Visible>
     <Location>
-      <X>855</X>
-      <Y>401</Y>
+      <X>1819</X>
+      <Y>252</Y>
     </Location>
     <Size>
       <Width>416</Width>

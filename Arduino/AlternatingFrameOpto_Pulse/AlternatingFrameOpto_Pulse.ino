@@ -2,9 +2,9 @@
 IntervalTimer samplingTimer;
 
 // Define pins
-const int startPin = 36; // Start stimulation sequence
-const int framePeriodPin = 35; // Read frame period waveform
-const int optoPin = 34; // Output optogenetic pulses
+const int startPin = 27; // Start stimulation sequence
+const int framePeriodPin = 9; // Read frame period waveform
+const int optoPin = 3; // Output optogenetic pulses
 
 // Adjustable parameters
 const int durationSec = 2; // Duration in seconds for the stimulation waveform
