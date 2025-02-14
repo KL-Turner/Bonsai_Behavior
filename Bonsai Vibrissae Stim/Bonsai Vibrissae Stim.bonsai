@@ -99,6 +99,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="ard:DigitalOutput">
+          <ard:PortName>Teensy 4.1</ard:PortName>
           <ard:Pin>35</ard:Pin>
         </Combinator>
       </Expression>
@@ -114,6 +115,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="ard:DigitalOutput">
+          <ard:PortName>Teensy 4.1</ard:PortName>
           <ard:Pin>35</ard:Pin>
         </Combinator>
       </Expression>
@@ -121,7 +123,7 @@
         <Combinator xsi:type="rx:Repeat" />
       </Expression>
       <Expression xsi:type="Annotation">
-        <Name>Rotary Encoder</Name>
+        <Name>Rotary</Name>
         <Text><![CDATA[]]></Text>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -135,12 +137,12 @@
         <viz:ValueSelector />
         <viz:SymbolType>None</viz:SymbolType>
         <viz:LineWidth>1</viz:LineWidth>
-        <viz:Capacity>60000</viz:Capacity>
+        <viz:Capacity>50000</viz:Capacity>
         <viz:Min xsi:nil="true" />
         <viz:Max xsi:nil="true" />
       </Expression>
       <Expression xsi:type="Annotation">
-        <Name>Frames</Name>
+        <Name>Fire</Name>
         <Text><![CDATA[]]></Text>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -154,7 +156,7 @@
         <viz:ValueSelector />
         <viz:SymbolType>None</viz:SymbolType>
         <viz:LineWidth>1</viz:LineWidth>
-        <viz:Capacity>6000</viz:Capacity>
+        <viz:Capacity>5000</viz:Capacity>
         <viz:Min xsi:nil="true" />
         <viz:Max xsi:nil="true" />
       </Expression>
@@ -173,7 +175,7 @@
         <viz:ValueSelector />
         <viz:SymbolType>None</viz:SymbolType>
         <viz:LineWidth>1</viz:LineWidth>
-        <viz:Capacity>60000</viz:Capacity>
+        <viz:Capacity>50000</viz:Capacity>
         <viz:Min xsi:nil="true" />
         <viz:Max xsi:nil="true" />
       </Expression>
@@ -231,7 +233,7 @@
         </PropertyMappings>
       </Expression>
       <Expression xsi:type="io:CsvWriter">
-        <io:FileName>2025_02_14_13_27_00_Data.csv</io:FileName>
+        <io:FileName>2025_02_14_15_23_01_Data.csv</io:FileName>
         <io:Append>false</io:Append>
         <io:Overwrite>true</io:Overwrite>
         <io:Suffix>None</io:Suffix>
