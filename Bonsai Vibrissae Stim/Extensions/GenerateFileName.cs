@@ -7,15 +7,15 @@ using Bonsai;
 [Combinator]
 [Description("Generates a formatted file name with the current DateTime in the format 'YYYY_MM_DD_HH_MM_SS', adds a suffix, and appends '.csv' to the end.")]
 [WorkflowElementCategory(ElementCategory.Source)]
-public class GenerateFileName_Wheel
+public class GenerateFileName
 {
     // Property to hold the suffix
     public string Suffix { get; set; }
 
     // Constructor to set the default values
-    public GenerateFileName_Wheel()
+    public GenerateFileName()
     {
-        Suffix = "_WheelData"; // Default suffix
+        Suffix = "_LickData"; // Default suffix
     }
 
     // Process method to signal this as a source node
