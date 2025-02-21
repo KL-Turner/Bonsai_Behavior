@@ -2,13 +2,20 @@
 IntervalTimer samplingTimer;
 
 // Define pins
-const int startPin = 27; // Start stimulation sequence
-const int framePeriodPin = 9; // Read frame period waveform
 const int optoPin = 3; // Output optogenetic pulses
+const int framePeriodPin = 9; // Read frame period waveform
+const int frameSimPin = 10; // Internal frame waveform generator for training
+const int startPin = 27; // Start stimulation sequence
 
 // Adjustable parameters
 const int durationSec = 2; // Duration in seconds for the stimulation waveform
 float frameBufferFraction = 0.1; // Buffer as a fraction of the frame period (10%)
+const bool useInternalFrameGen = true; // Set to true for training, set to false for 2P
+
+// Frame simulation variables
+const int frameHighTime = 5000; // 5 ms High 
+const int frameLowTime = 45000;  // 45 ms Low 
+volatile bool frameState = false;
 
 // Variables for timing
 volatile unsigned long frameCounter = 0;  // Count of frames
@@ -70,6 +77,12 @@ void loop() {
     stimulationStartTime = 0;
     digitalWrite(optoPin, LOW); // Ensure optoPin is turned off
   }
+}
+
+// Function to generate internal frame waveform
+void generateFrameWaveform() {
+  frameState = !frameState;
+  digitalWrite(frameSimPin, frameState);
 }
 
 // Measure the frame period and generate opto pulses
