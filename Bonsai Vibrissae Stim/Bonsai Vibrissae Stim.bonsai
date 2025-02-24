@@ -61,7 +61,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="ard:DigitalOutput">
           <ard:PortName>Teensy 4.1</ard:PortName>
-          <ard:Pin>32</ard:Pin>
+          <ard:Pin>5</ard:Pin>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -77,7 +77,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="ard:DigitalOutput">
           <ard:PortName>Teensy 4.1</ard:PortName>
-          <ard:Pin>32</ard:Pin>
+          <ard:Pin>5</ard:Pin>
         </Combinator>
       </Expression>
       <Expression xsi:type="Annotation">
@@ -233,7 +233,7 @@
         </PropertyMappings>
       </Expression>
       <Expression xsi:type="io:CsvWriter">
-        <io:FileName>2025_02_14_15_23_01_Data.csv</io:FileName>
+        <io:FileName>2025_02_17_11_48_10_Data.csv</io:FileName>
         <io:Append>false</io:Append>
         <io:Overwrite>true</io:Overwrite>
         <io:Suffix>None</io:Suffix>
