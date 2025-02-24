@@ -14,8 +14,8 @@ float frameBufferFraction = 0.1; // Buffer as a fraction of the frame period (10
 const bool useInternalFrameGen = true; // Set to true for training, set to false for 2P
 
 // Frame simulation variables
-const int frameHighTime = 5000; // 5 ms on pulse 
-const int frameLowTime = 45000;  // 45 ms off pulse 
+const int frameHighTime = 25000; // 5 ms on pulse 
+const int frameLowTime = 25000;  // 45 ms off pulse 
 volatile bool frameState = false;
 
 // Variables for timing
@@ -110,6 +110,17 @@ void loop() {
     stimulationActive = false;
     stimulationStartTime = 0;
     digitalWrite(optoPin, LOW); // Ensure optoPin is turned off
+  }
+}
+
+// Function to generate internal frame waveform
+void generateFrameWaveform() {
+  frameState = !frameState;
+  digitalWrite(frameSimPin, frameState);
+  if (frameState) {
+    frameGenTimer.update(frameHighTime);
+  } else {
+    frameGenTimer.update(frameLowTime);
   }
 }
 
