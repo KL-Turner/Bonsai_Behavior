@@ -22,7 +22,7 @@
         </Combinator>
       </Expression>
       <Expression xsi:type="Annotation">
-        <Name>Set Rec Time</Name>
+        <Name>Rec Time</Name>
         <Text><![CDATA[]]></Text>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -142,7 +142,7 @@
         <viz:Max xsi:nil="true" />
       </Expression>
       <Expression xsi:type="Annotation">
-        <Name>Fire</Name>
+        <Name>Frames</Name>
         <Text><![CDATA[]]></Text>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -180,7 +180,7 @@
         <viz:Max xsi:nil="true" />
       </Expression>
       <Expression xsi:type="Annotation">
-        <Name>Save analog data</Name>
+        <Name>Sample Analog</Name>
         <Text><![CDATA[]]></Text>
       </Expression>
       <Expression xsi:type="Combinator">
