@@ -105,7 +105,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Delay">
-          <rx:DueTime>PT2S</rx:DueTime>
+          <rx:DueTime>PT0.5S</rx:DueTime>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -137,9 +137,9 @@
         <viz:ValueSelector />
         <viz:SymbolType>None</viz:SymbolType>
         <viz:LineWidth>1</viz:LineWidth>
-        <viz:Capacity>50000</viz:Capacity>
-        <viz:Min xsi:nil="true" />
-        <viz:Max xsi:nil="true" />
+        <viz:Capacity>10000</viz:Capacity>
+        <viz:Min>0</viz:Min>
+        <viz:Max>1200</viz:Max>
       </Expression>
       <Expression xsi:type="Annotation">
         <Name>Frames</Name>
@@ -157,8 +157,8 @@
         <viz:SymbolType>None</viz:SymbolType>
         <viz:LineWidth>1</viz:LineWidth>
         <viz:Capacity>5000</viz:Capacity>
-        <viz:Min xsi:nil="true" />
-        <viz:Max xsi:nil="true" />
+        <viz:Min>0</viz:Min>
+        <viz:Max>1200</viz:Max>
       </Expression>
       <Expression xsi:type="Annotation">
         <Name>Piezo</Name>
@@ -175,9 +175,9 @@
         <viz:ValueSelector />
         <viz:SymbolType>None</viz:SymbolType>
         <viz:LineWidth>1</viz:LineWidth>
-        <viz:Capacity>50000</viz:Capacity>
-        <viz:Min xsi:nil="true" />
-        <viz:Max xsi:nil="true" />
+        <viz:Capacity>10000</viz:Capacity>
+        <viz:Min>0</viz:Min>
+        <viz:Max>1200</viz:Max>
       </Expression>
       <Expression xsi:type="Annotation">
         <Name>Sample Analog</Name>
@@ -233,7 +233,7 @@
         </PropertyMappings>
       </Expression>
       <Expression xsi:type="io:CsvWriter">
-        <io:FileName>2025_02_17_11_48_10_Data.csv</io:FileName>
+        <io:FileName>2025_02_27_16_12_43_Data.csv</io:FileName>
         <io:Append>false</io:Append>
         <io:Overwrite>true</io:Overwrite>
         <io:Suffix>None</io:Suffix>

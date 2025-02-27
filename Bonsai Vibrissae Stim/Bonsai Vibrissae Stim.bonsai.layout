@@ -293,8 +293,8 @@
   <DialogSettings>
     <Visible>true</Visible>
     <Location>
-      <X>1146</X>
-      <Y>149</Y>
+      <X>1894</X>
+      <Y>415</Y>
     </Location>
     <Size>
       <Width>416</Width>
@@ -304,10 +304,10 @@
     <VisualizerTypeName>Bonsai.Design.Visualizers.RollingGraphVisualizer</VisualizerTypeName>
     <VisualizerSettings>
       <RollingGraphVisualizer>
-        <Capacity>50000</Capacity>
-        <Min>1016</Min>
-        <Max>1019.5</Max>
-        <AutoScale>true</AutoScale>
+        <Capacity>10000</Capacity>
+        <Min>0</Min>
+        <Max>1200</Max>
+        <AutoScale>false</AutoScale>
       </RollingGraphVisualizer>
     </VisualizerSettings>
   </DialogSettings>
@@ -338,8 +338,8 @@
   <DialogSettings>
     <Visible>true</Visible>
     <Location>
-      <X>1558</X>
-      <Y>148</Y>
+      <X>1893</X>
+      <Y>133</Y>
     </Location>
     <Size>
       <Width>416</Width>
@@ -351,8 +351,8 @@
       <RollingGraphVisualizer>
         <Capacity>5000</Capacity>
         <Min>0</Min>
-        <Max>1.1</Max>
-        <AutoScale>true</AutoScale>
+        <Max>1200</Max>
+        <AutoScale>false</AutoScale>
       </RollingGraphVisualizer>
     </VisualizerSettings>
   </DialogSettings>
@@ -383,8 +383,8 @@
   <DialogSettings>
     <Visible>true</Visible>
     <Location>
-      <X>1338</X>
-      <Y>451</Y>
+      <X>1898</X>
+      <Y>692</Y>
     </Location>
     <Size>
       <Width>416</Width>
@@ -394,10 +394,10 @@
     <VisualizerTypeName>Bonsai.Design.Visualizers.RollingGraphVisualizer</VisualizerTypeName>
     <VisualizerSettings>
       <RollingGraphVisualizer>
-        <Capacity>50000</Capacity>
+        <Capacity>10000</Capacity>
         <Min>0</Min>
-        <Max>1.1</Max>
-        <AutoScale>true</AutoScale>
+        <Max>1200</Max>
+        <AutoScale>false</AutoScale>
       </RollingGraphVisualizer>
     </VisualizerSettings>
   </DialogSettings>
