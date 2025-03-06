@@ -10,7 +10,7 @@ const int startPin = 27; // Start stimulation sequence
 // Adjustable parameters
 const int durationSec = 2; // Duration in seconds for the stimulation waveform
 float frameBufferFraction = 0.1; // Buffer as a fraction of the frame period (10%)
-const bool useInternalFrameGen = true; // Set to true for training, set to false for 2P
+const bool useInternalFrameGen = false; // Set to true for training, set to false for 2P
 
 // Frame simulation variables
 const int frameHighTime = 5000; // 5 ms High 

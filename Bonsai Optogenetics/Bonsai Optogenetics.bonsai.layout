@@ -255,10 +255,10 @@
     <WindowState>Normal</WindowState>
   </DialogSettings>
   <DialogSettings>
-    <Visible>false</Visible>
+    <Visible>true</Visible>
     <Location>
-      <X>208</X>
-      <Y>208</Y>
+      <X>1813</X>
+      <Y>92</Y>
     </Location>
     <Size>
       <Width>416</Width>
@@ -269,8 +269,8 @@
     <VisualizerSettings>
       <RollingGraphVisualizer>
         <Capacity>50000</Capacity>
-        <Min>100</Min>
-        <Max>600</Max>
+        <Min>120</Min>
+        <Max>150</Max>
         <AutoScale>true</AutoScale>
       </RollingGraphVisualizer>
     </VisualizerSettings>
@@ -300,10 +300,10 @@
     <WindowState>Normal</WindowState>
   </DialogSettings>
   <DialogSettings>
-    <Visible>false</Visible>
+    <Visible>true</Visible>
     <Location>
-      <X>234</X>
-      <Y>234</Y>
+      <X>1816</X>
+      <Y>371</Y>
     </Location>
     <Size>
       <Width>416</Width>
@@ -314,8 +314,8 @@
     <VisualizerSettings>
       <RollingGraphVisualizer>
         <Capacity>5000</Capacity>
-        <Min>100</Min>
-        <Max>700</Max>
+        <Min>56</Min>
+        <Max>72</Max>
         <AutoScale>true</AutoScale>
       </RollingGraphVisualizer>
     </VisualizerSettings>
@@ -345,10 +345,10 @@
     <WindowState>Normal</WindowState>
   </DialogSettings>
   <DialogSettings>
-    <Visible>false</Visible>
+    <Visible>true</Visible>
     <Location>
-      <X>72</X>
-      <Y>42</Y>
+      <X>1816</X>
+      <Y>649</Y>
     </Location>
     <Size>
       <Width>416</Width>
@@ -359,8 +359,8 @@
     <VisualizerSettings>
       <RollingGraphVisualizer>
         <Capacity>50000</Capacity>
-        <Min>200</Min>
-        <Max>700</Max>
+        <Min>-1</Min>
+        <Max>1</Max>
         <AutoScale>true</AutoScale>
       </RollingGraphVisualizer>
     </VisualizerSettings>

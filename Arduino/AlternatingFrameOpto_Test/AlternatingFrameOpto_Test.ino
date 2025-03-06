@@ -3,7 +3,7 @@ IntervalTimer samplingTimer;
 IntervalTimer frameGenTimer; // Simulated waveform timer
 
 // Define pins
-const int optoPin = 3;         // Output optogenetic pulses
+const int optoPin = 23;         // Output optogenetic pulses
 const int framePeriodPin = 9;   // Read frame period waveform
 const int frameSimPin = 10;     // Internal frame waveform generator for training
 const int startPin = 27;       // Start stimulation sequence
@@ -11,7 +11,7 @@ const int startPin = 27;       // Start stimulation sequence
 // Adjustable parameters
 const int durationSec = 2;           // Duration (in seconds) for the stimulation waveform
 float frameBufferFraction = 0.10;       // Buffer as a fraction of the frame period (10%)
-const bool useInternalFrameGen = true; // Set to true for training, false for 2P
+const bool useInternalFrameGen = false; // Set to true for training, false for 2P
 
 // Frame simulation variables
 const int frameHighTime = 5000; // (e.g., 25,000 µs high pulse)
