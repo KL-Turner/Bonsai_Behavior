@@ -24,8 +24,8 @@
 */
 
 #define TEENSY41
-#include <Boards.h>
 #include <Servo.h>
+#include <Boards.h>
 #include <Wire.h>
 #include <Firmata.h>
 
