@@ -5,7 +5,7 @@
 
 const int Fs = 5000; // sampling rate
 const int waveMax = 4095; // it's a 12bit dac, so this will always be the max voltage out
-const int trigPin = 27; // digital channel to trigger the wave with a ttl
+const int trigPin = 33; // digital channel to trigger the wave with a ttl
 
 // waveform parameters to be set over serial for each of the 4 DAC channels
 volatile int waveType[4] = {1,1,1,1}; // wave types: 0 = whale, 1 = square

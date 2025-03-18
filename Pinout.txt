@@ -1,7 +1,12 @@
 
-TEENSY 4.1 A - COM07 / usb:70001/3/0/1
+TEENSY 4.1 A - COM09 / usb:70001/3/0/1
 
-TEENSY 4.1 B - COM16 / usb:70001/3/0/2
+TEENSY 4.1 B - COM11 / usb:70001/3/0/2
+
+<channel(0-3),waveform(0-4, 0=sqaure,1=whale,2 = ramp up, 3 = ramp down, 4 = pyramid, ramp up and then down),length of pulse (ms), amp(0-4095),inter-pulse-interval(ms), number repetitions,baseline period (ms)>
+e.g.,
+<0,0,25,2048,25,5,100> = channel 0, square, 25ms long, half max voltage, 25ms inter-pulse-interval, 5 repititions, 100 ms baseline (waveform will start 100 ms after it's triggered). 
+*if you're able to get serial back it will report the current settings for all channels once you send these settings for one channel
 
 Teensy 4.1 A
 12 DIGITAL INPUT - CAPACITIVE SENSOR A - DIRECT CONNECTION ✓
@@ -33,28 +38,6 @@ Teensy 4.1 A
 
 
 Teensy 4.1 B
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 16 SCL1 - MCP4725 CHIP A (0x062) TO BD200 (INPUT 1, Pin2) TO PIEZO A (Pin9+, Pin8-)
 17 SDA1 - MCP4725 CHIP A (0x062) TO BD200 (INPUT 1, Pin2) TO PIEZO A (Pin9+, Pin8-)
