@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "KXu0DOxgdWY=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\moorelabptop\\Documents\\Bonsai_Behavior\\Bonsai Pavlovian\\Extensions.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\moorelabptop\\.nuget\\packages\\bonsai.core\\2.8.5\\bonsai.core.2.8.5.nupkg.sha512",
+    "C:\\Users\\moorelabptop\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.3\\microsoft.netframework.referenceassemblies.1.0.3.nupkg.sha512",
+    "C:\\Users\\moorelabptop\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net472\\1.0.3\\microsoft.netframework.referenceassemblies.net472.1.0.3.nupkg.sha512",
+    "C:\\Users\\moorelabptop\\.nuget\\packages\\rx-core\\2.2.5\\rx-core.2.2.5.nupkg.sha512",
+    "C:\\Users\\moorelabptop\\.nuget\\packages\\rx-interfaces\\2.2.5\\rx-interfaces.2.2.5.nupkg.sha512",
+    "C:\\Users\\moorelabptop\\.nuget\\packages\\rx-linq\\2.2.5\\rx-linq.2.2.5.nupkg.sha512",
+    "C:\\Users\\moorelabptop\\.nuget\\packages\\rx-platformservices\\2.2.5\\rx-platformservices.2.2.5.nupkg.sha512"
+  ],
+  "logs": []
+}
