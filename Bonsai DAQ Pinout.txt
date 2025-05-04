@@ -1,14 +1,17 @@
+SWGBE - <0,0,25,2048,25,5,100>
 
-TEENSY 4.1 A - COM09 / usb:70001/3/0/1
+<channel(0-3), for MCP4728
+waveform(0-4, 
+0=sqaure,1=whale,2 = ramp up, 3 = ramp down, 4 = pyramid, ramp up and then down),
+length of pulse (ms),
+amp(0-4095),
+inter-pulse-interval(ms),
+number repetitions,
+ baseline period (ms)>
 
-TEENSY 4.1 B - COM11 / usb:70001/3/0/2
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Teensy 4.1 A - COM18
 
-<channel(0-3),waveform(0-4, 0=sqaure,1=whale,2 = ramp up, 3 = ramp down, 4 = pyramid, ramp up and then down),length of pulse (ms), amp(0-4095),inter-pulse-interval(ms), number repetitions,baseline period (ms)>
-e.g.,
-<0,0,25,2048,25,5,100> = channel 0, square, 25ms long, half max voltage, 25ms inter-pulse-interval, 5 repititions, 100 ms baseline (waveform will start 100 ms after it's triggered). 
-*if you're able to get serial back it will report the current settings for all channels once you send these settings for one channel
-
-Teensy 4.1 A
 12 DIGITAL INPUT - CAPACITIVE SENSOR A - DIRECT CONNECTION ✓
 11 DIGITAL INPUT - CAPACITIVE SENSOR B - DIRECT CONNECTION ✓
 26 DIGITAL OUTPUT - TRIGGER SOLENOID A - CHANNEL 3 ✓
@@ -16,28 +19,18 @@ Teensy 4.1 A
 9 DIGITAL OUTPUT - SYNC ANDOR CAMERA DAQ - CHANNEL 5 ✓
 10 DIGITAL OUTPUT - SYNC PRAIRIE VIEW DAQ - CHANNEL 6 ✓
 
-14 ANALOG INPUT (A0) - PIEZO B TRIGGER
-15 ANALOG INPUT (A1) - OPTO LED
-16 ANALOG INPUT (A2) - PRAIRIE VIEW FRAME COUNTER
-17 ANALOG INPUT (A3) - ANDOR FRAME COUNTER
-18 ANALOG INPUT (A4) - PIEZO A TRIGGER
-20 ANALOG INPUT (A6) - OPTO LED TRIGGER
-21 ANALOG INPUT (A7) - SOLENOID A TRIGGER
-22 ANALOG INPUT (A8) - SOLENOID B TRIGGER
-
-20 ANALOG INPUT (A6) - PIEZO A TRIGGER - CHANNEL 7 - 33 DIGITAL OUTPUT
-21 ANALOG INPUT (A7) - PIEZO A TRIGGER - CHANNEL 8 - 34 DIGITAL OUTPUT
-22 ANALOG INPUT (A8) - LED TRIGGER (INTERNAL) - 35 DIGITAL OUTPUT
-
+14 ANALOG INPUT (A0) - PRAIRIE VIEW FRAME COUNTER - CHANNEL 1 ✓
+15 ANALOG INPUT (A1) - OPTO LED OUTPUT - CHANNEL 9 ✓
+16 ANALOG INPUT (A2) - ANDOR FRAME COUNTER - CHANNEL 2 ✓
 17 ANALOG INPUT (A3) - SOLENOID A TRIGGER - DIGITAL OUTPUT 26 ✓
 18 ANALOG INPUT (A4) - SOLENOID B TRIGGER - DIGITAL OUTPUT 25 ✓
 19 ANALOG INPUT (A5) - ROTARY ENCODER - DIRECT CONNECTION ✓
-20 ANALOG INPUT (A6) - PIEZO A TRIGGER - CHANNEL 7 - 33 DIGITAL OUTPUT
-21 ANALOG INPUT (A7) - PIEZO A TRIGGER - CHANNEL 8 - 34 DIGITAL OUTPUT
-22 ANALOG INPUT (A8) - LED TRIGGER (INTERNAL) - 35 DIGITAL OUTPUT
+20 ANALOG INPUT (A6) - PIEZO TRIGGER A - DIGITAL OUTPUT 33 ✓
+21 ANALOG INPUT (A7) - PIEZO TRIGGER B - DIGITAL OUTPUT 34 ✓
+22 ANALOG INPUT (A8) - CAPACITIVE SENSOR A - DIRECT CONNECTION ✓
+23 ANALOG INPUT (A9) - CAPACITIVE SENSOR B - DIRECT CONNECTION ✓
 
-
-Teensy 4.1 B
+Teensy 4.1 B - COM19
 
 16 SCL1 - MCP4725 CHIP A (0x062) TO BD200 (INPUT 1, Pin2) TO PIEZO A (Pin9+, Pin8-)
 17 SDA1 - MCP4725 CHIP A (0x062) TO BD200 (INPUT 1, Pin2) TO PIEZO A (Pin9+, Pin8-)
