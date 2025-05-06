@@ -278,7 +278,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Delay">
-          <rx:DueTime>PT2.7793183S</rx:DueTime>
+          <rx:DueTime>PT2.1422145S</rx:DueTime>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
