@@ -28,7 +28,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Timer">
-          <rx:DueTime>PT5M</rx:DueTime>
+          <rx:DueTime>PT10M</rx:DueTime>
           <rx:Period>PT0S</rx:Period>
         </Combinator>
       </Expression>
@@ -114,8 +114,8 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>2</p1:Lower>
-                <p1:Upper>7</p1:Upper>
+                <p1:Lower>7</p1:Lower>
+                <p1:Upper>12</p1:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -143,7 +143,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Delay">
-          <rx:DueTime>PT5.5786098S</rx:DueTime>
+          <rx:DueTime>PT2.4720202S</rx:DueTime>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
