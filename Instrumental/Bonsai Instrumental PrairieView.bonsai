@@ -216,6 +216,9 @@
               <Name>TrialState</Name>
               <rx:BufferSize xsi:nil="true" />
             </Expression>
+            <Expression xsi:type="SubscribeSubject">
+              <Name>TrialState</Name>
+            </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
                 <rx:DueTime>PT2.5S</rx:DueTime>
@@ -223,12 +226,7 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
-              <Combinator xsi:type="BooleanProperty">
-                <Value>true</Value>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="rx:Gate" />
+              <Combinator xsi:type="rx:SubscribeWhen" />
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Take">
@@ -243,8 +241,7 @@
             <Edge From="2" To="3" Label="Source1" />
             <Edge From="3" To="4" Label="Source2" />
             <Edge From="4" To="5" Label="Source1" />
-            <Edge From="5" To="8" Label="Source1" />
-            <Edge From="6" To="7" Label="Source1" />
+            <Edge From="6" To="8" Label="Source1" />
             <Edge From="7" To="8" Label="Source2" />
             <Edge From="8" To="9" Label="Source1" />
             <Edge From="9" To="10" Label="Source1" />
@@ -439,7 +436,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Delay">
-          <rx:DueTime>PT5.9083695S</rx:DueTime>
+          <rx:DueTime>PT6.4744213S</rx:DueTime>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
