@@ -93,7 +93,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Timer">
-          <rx:DueTime>PT2S</rx:DueTime>
+          <rx:DueTime>PT5S</rx:DueTime>
           <rx:Period>PT0S</rx:Period>
         </Combinator>
       </Expression>
@@ -199,6 +199,11 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Timer">
                 <rx:DueTime>PT2S</rx:DueTime>
                 <rx:Period>PT0S</rx:Period>
@@ -210,7 +215,17 @@
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:Amb" />
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
             </Expression>
             <Expression xsi:type="rx:ReplaySubject">
               <Name>TrialState</Name>
@@ -237,14 +252,17 @@
           </Nodes>
           <Edges>
             <Edge From="0" To="1" Label="Source1" />
-            <Edge From="1" To="4" Label="Source1" />
-            <Edge From="2" To="3" Label="Source1" />
-            <Edge From="3" To="4" Label="Source2" />
+            <Edge From="1" To="2" Label="Source1" />
+            <Edge From="2" To="6" Label="Source1" />
+            <Edge From="3" To="4" Label="Source1" />
             <Edge From="4" To="5" Label="Source1" />
-            <Edge From="6" To="8" Label="Source1" />
-            <Edge From="7" To="8" Label="Source2" />
-            <Edge From="8" To="9" Label="Source1" />
-            <Edge From="9" To="10" Label="Source1" />
+            <Edge From="5" To="6" Label="Source2" />
+            <Edge From="6" To="7" Label="Source1" />
+            <Edge From="7" To="8" Label="Source1" />
+            <Edge From="9" To="11" Label="Source1" />
+            <Edge From="10" To="11" Label="Source2" />
+            <Edge From="11" To="12" Label="Source1" />
+            <Edge From="12" To="13" Label="Source1" />
           </Edges>
         </Workflow>
       </Expression>
@@ -436,7 +454,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Delay">
-          <rx:DueTime>PT6.4744213S</rx:DueTime>
+          <rx:DueTime>PT3.8855172S</rx:DueTime>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -747,9 +765,9 @@
       <Edge From="26" To="27" Label="Source1" />
       <Edge From="27" To="28" Label="Source2" />
       <Edge From="28" To="29" Label="Source1" />
-      <Edge From="28" To="31" Label="Source2" />
+      <Edge From="28" To="31" Label="Source1" />
       <Edge From="29" To="30" Label="Source1" />
-      <Edge From="30" To="31" Label="Source1" />
+      <Edge From="30" To="31" Label="Source2" />
       <Edge From="31" To="32" Label="Source1" />
       <Edge From="32" To="34" Label="Source1" />
       <Edge From="33" To="34" Label="Source2" />
