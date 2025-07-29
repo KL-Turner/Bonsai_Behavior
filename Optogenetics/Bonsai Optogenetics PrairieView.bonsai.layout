@@ -233,11 +233,11 @@
       <Visible>false</Visible>
       <Location>
         <X>188</X>
-        <Y>445</Y>
+        <Y>446</Y>
       </Location>
       <Size>
         <Width>447</Width>
-        <Height>239</Height>
+        <Height>238</Height>
       </Size>
       <WindowState>Normal</WindowState>
     </EditorDialogSettings>

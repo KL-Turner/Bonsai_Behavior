@@ -30,7 +30,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Timer">
-          <rx:DueTime>PT40M</rx:DueTime>
+          <rx:DueTime>PT45M</rx:DueTime>
           <rx:Period>PT0S</rx:Period>
         </Combinator>
       </Expression>
@@ -49,7 +49,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="ard:DigitalOutput">
           <ard:PortName>Teensy 4.1</ard:PortName>
-          <ard:Pin>10</ard:Pin>
+          <ard:Pin>9</ard:Pin>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -65,7 +65,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="ard:DigitalOutput">
           <ard:PortName>Teensy 4.1</ard:PortName>
-          <ard:Pin>10</ard:Pin>
+          <ard:Pin>9</ard:Pin>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -430,8 +430,8 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>2</p1:Lower>
-                <p1:Upper>7</p1:Upper>
+                <p1:Lower>10</p1:Lower>
+                <p1:Upper>20</p1:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -459,7 +459,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Delay">
-          <rx:DueTime>PT6.9518127S</rx:DueTime>
+          <rx:DueTime>PT11.8933109S</rx:DueTime>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -709,7 +709,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="ard:AnalogInput">
           <ard:PortName>Teensy 4.1</ard:PortName>
-          <ard:Pin>1</ard:Pin>
+          <ard:Pin>2</ard:Pin>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
