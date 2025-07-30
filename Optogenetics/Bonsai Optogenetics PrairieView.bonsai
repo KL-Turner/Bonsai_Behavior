@@ -100,7 +100,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="ard:DigitalOutput">
           <ard:PortName>Teensy 4.1</ard:PortName>
-          <ard:Pin>33</ard:Pin>
+          <ard:Pin>35</ard:Pin>
         </Combinator>
       </Expression>
       <Expression xsi:type="rx:SelectMany">
@@ -143,7 +143,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Delay">
-          <rx:DueTime>PT16.0233215S</rx:DueTime>
+          <rx:DueTime>PT17.5179033S</rx:DueTime>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
