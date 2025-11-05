@@ -1,16 +1,15 @@
-SWGBE - <0,0,25,2048,25,5,100>
+SWGBE - Safe default - <0,0,25,2048,25,10,0>
 
-<channel(0-3), for MCP4728
-waveform(0-4, 
-0=sqaure,1=whale,2 = ramp up, 3 = ramp down, 4 = pyramid, ramp up and then down),
+<channel(0-3),
+waveform(0 = whale, 1 = square, 2 = ramp up, 3 = ramp down, 4 = pyramid),
 length of pulse (ms),
-amp(0-4095),
-inter-pulse-interval(ms),
+amplitude (0-4095),
+inter-pulse-interval (ms),
 number repetitions,
- baseline period (ms)>
+baseline period (ms)>
 
 -------------------------------------------------------------------------------------------
-Teensy 4.1 A - COM18
+Teensy 4.1 A
 
 12 DIGITAL INPUT - CAPACITIVE SENSOR A - DIRECT CONNECTION
 11 DIGITAL INPUT - CAPACITIVE SENSOR B - DIRECT CONNECTION
@@ -32,7 +31,7 @@ Teensy 4.1 A - COM18
 
 -------------------------------------------------------------------------------------------
 
-Teensy 4.1 B - COM19
+Teensy 4.1 B
 
 30 DIGITAL INPUT - ANDOR FRAME COUNTER
 31 DIGITAL INPUT - PRAIRIE VIEW FRAME COUNTER
