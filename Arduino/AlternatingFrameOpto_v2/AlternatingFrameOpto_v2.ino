@@ -1,10 +1,9 @@
 #include <IntervalTimer.h>
 
-// ===================================================================================================
-//  ADJUSTABLE PARAMETERS  (modes, then opto, then shutter)
-// ===================================================================================================
-
-// ---- Stimulus MODE switches -----------------------------------------------------------------------
+// =========================================================================================================
+// =========================================================================================================
+// =========================================================================================================
+// ---- Stimulus MODE switches -----------------------------------------------------------------------------
 // Stimulus pattern: useAlternatingFrames
 //   true  = frame-locked ALTERNATING pattern -- opto fires on odd (stim) frames only, off on even
 //           (imaging) frames. Needs a frame clock (real 2P or internal gen).
@@ -27,7 +26,7 @@ const bool useAlternatingShutter = false;
 const bool useInternalFrameGen = false;
 const float internalFrameRateHz = 5.0;       // internal frame-gen rate (Hz); Prairie-View-like training default
 
-// ---- Opto parameters ------------------------------------------------------------------------------
+// ---- Opto parameters ------------------------------------------------------------------------------------
 // Opto "carrier" pulse train, specified as duration + frequency + pulse width (the standard optogenetic
 // parameterization). Duty cycle = optoPulseWidthMs * optoFreqHz (10% at 20 Hz / 5 ms). Keeping the pulse
 // WIDTH fixed when you change the frequency is the physiologically correct behavior -- short pulses evoke
@@ -35,8 +34,24 @@ const float internalFrameRateHz = 5.0;       // internal frame-gen rate (Hz); Pr
 const int optoDurationSec        = 2;      // stimulation duration (s)
 constexpr float optoFreqHz       = 20.0f;  // opto carrier frequency (Hz)
 constexpr float optoPulseWidthMs = 5.0f;   // opto pulse width (ms); must be shorter than one period
+// =========================================================================================================
+// =========================================================================================================
+// =========================================================================================================
 
-// ---- Shutter Adjustable parameters ----------------------------------------------------------------
+// Define pins
+const int framePeriodPin = 31;  // External 2P frame-sync input (used only when useInternalFrameGen == false)
+const int startPin       = 35;  // Start-stimulation trigger (brief "go" pulse) in
+const int optoPin        = 36;  // Optogenetic LED pulses out
+const int shutterPin     = 37;  // PMT shutter TTL (Bruker "Uncaging" BNC). Empirical: HIGH = CLOSED, LOW = OPEN.
+
+// ---- Derived constants (computed from the parameters above; not meant to be edited) ---------------------
+static_assert(optoPulseWidthMs * optoFreqHz < 1000.0f, "opto pulse width must be < one period (duty < 100%)");
+constexpr unsigned long optoPeriodUs = (unsigned long)(1000000.0f / optoFreqHz + 0.5f);    // opto carrier period (us)
+constexpr unsigned long pulseOnUs    = (unsigned long)(optoPulseWidthMs * 1000.0f + 0.5f); // LED ON per pulse (us)
+constexpr unsigned long pulseOffUs   = optoPeriodUs - pulseOnUs;                           // LED OFF per pulse (us)
+const unsigned long internalFramePeriodUs = (unsigned long)(1000000.0 / internalFrameRateHz + 0.5); // internal frame period (us)
+
+// ---- Shutter parameters ---------------------------------------------------------------------------------
 // (Rarely changed.) PMT shutter timing.
 const unsigned long shutterLeadMs = 100;        // PMT shutter closes this long BEFORE the stim (whole-stim wrap)
 const unsigned long shutterLagMs  = 100;        // PMT shutter opens this long AFTER the stim (whole-stim wrap)
@@ -47,22 +62,7 @@ const unsigned long minImagingWindowMs = 30;    // per-frame mode used only if t
 // fire before the shutter has physically settled closed.
 static_assert(shutterLeadMs >= shutterActuationMs, "shutterLeadMs must be >= shutterActuationMs");
 
-// ===================================================================================================
-
-// Define pins
-const int framePeriodPin = 31;  // External 2P frame-sync input (used only when useInternalFrameGen == false)
-const int startPin       = 35;  // Start-stimulation trigger (brief "go" pulse) in
-const int optoPin        = 36;  // Optogenetic LED pulses out
-const int shutterPin     = 37;  // PMT shutter TTL (Bruker "Uncaging" BNC). Empirical: HIGH = CLOSED, LOW = OPEN.
-
-// ---- Derived constants (computed from the parameters above; not meant to be edited) ---------------
-static_assert(optoPulseWidthMs * optoFreqHz < 1000.0f, "opto pulse width must be < one period (duty < 100%)");
-constexpr unsigned long optoPeriodUs = (unsigned long)(1000000.0f / optoFreqHz + 0.5f);    // opto carrier period (us)
-constexpr unsigned long pulseOnUs    = (unsigned long)(optoPulseWidthMs * 1000.0f + 0.5f); // LED ON per pulse (us)
-constexpr unsigned long pulseOffUs   = optoPeriodUs - pulseOnUs;                           // LED OFF per pulse (us)
-const unsigned long internalFramePeriodUs = (unsigned long)(1000000.0 / internalFrameRateHz + 0.5); // internal frame period (us)
-
-// ---- State ----------------------------------------------------------------------------------------
+// ---- State ----------------------------------------------------------------------------------------------
 // Hardware timer for the internal (simulated) frame clock (used only when useInternalFrameGen).
 IntervalTimer frameGenTimer;
 
@@ -107,7 +107,7 @@ unsigned long startTime;
 unsigned long lastPrintTime = 0;
 const unsigned long printInterval = 5000;
 
-// ---- Helpers --------------------------------------------------------------------------------------
+// ---- Helpers --------------------------------------------------------------------------------------------
 // Drive the PMT shutter. HIGH = CLOSED (PMTs protected), LOW = OPEN. Every operational shutter write goes
 // through here (the boot LOW in setup() stays a direct digitalWrite).
 void setShutter(bool closed) {
@@ -124,7 +124,7 @@ void forceOptoOff() {
   optoEdgeUs = micros();
 }
 
-// ---- Setup / loop ---------------------------------------------------------------------------------
+// ---- Setup / loop ---------------------------------------------------------------------------------------
 void setup() {
   // PMT shutter: drive LOW (= OPEN = normal imaging) as the very first action so pin 37 spends the least
   // possible time floating during boot. (External pull-downs on pin 37 AND optoPin/pin 36 are still
@@ -266,7 +266,7 @@ void loop() {
   driveOpto();
 }
 
-// ---- Frame sources --------------------------------------------------------------------------------
+// ---- Frame sources --------------------------------------------------------------------------------------
 // Per-frame stim bookkeeping, called once per new frame by both frame sources. Opto emission itself is
 // handled in loop() (driveOpto), so this stays short (safe inside an ISR / timer callback).
 void onNewFrame() {
@@ -305,7 +305,7 @@ void internalFrameTick() {
   onNewFrame();
 }
 
-// ---- Non-blocking opto pulse generator ------------------------------------------------------------
+// ---- Non-blocking opto pulse generator ------------------------------------------------------------------
 // Driven from loop() every iteration (loop never blocks in alternating mode, so edges land within a few
 // microseconds of target). Emits the 5/45 ms carrier ONLY while a stim is active, the shutter is confirmed
 // closed (optoArmed), and we are on an odd (stim) frame. optoArmed==true implies the shutter was commanded
@@ -329,7 +329,7 @@ void driveOpto() {
   }
 }
 
-// ---- Per-frame shutter driver ---------------------------------------------------------------------
+// ---- Per-frame shutter driver ---------------------------------------------------------------------------
 // Alternating mode with a feasible frame rate: open the PMT shutter on non-stim (even) frames for imaging
 // and close it before each stim (odd) frame. optoArmed is armed only after a close has had shutterActuationMs
 // to settle, and forceOptoOff() guarantees the LED is off before every open.
@@ -367,7 +367,7 @@ void driveShutterPerFrame() {
   }
 }
 
-// ---- Bypass mode ----------------------------------------------------------------------------------
+// ---- Bypass mode ----------------------------------------------------------------------------------------
 // useAlternatingFrames == false: a single blocking, shutter-wrapped continuous train. Shutter CLOSED ->
 // lead -> continuous opto carrier for optoDurationSec -> lag -> shutter OPEN. Needs no frame clock. The
 // loop-driven opto state machine (driveOpto) is not reached while this blocks, and stimulationActive is
