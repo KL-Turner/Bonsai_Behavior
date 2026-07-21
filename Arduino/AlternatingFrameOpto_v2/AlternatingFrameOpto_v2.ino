@@ -40,14 +40,11 @@ constexpr unsigned long pulseOffUs   = optoPeriodUs - pulseOnUs;
 const bool useAlternatingFrames = true;
 
 // PMT shutter control:
-//   useShutter       false = never CLOSE the shutter (pin 37 stays LOW/open); the stim runs with NO PMT
-//                    protection (training / no imaging). true = the shutter is driven as below.
-//   alternateShutter (only when useShutter) false = keep the shutter CLOSED for the whole stim; true =
-//                    OPEN the shutter on non-stim frames to image between stim frames, re-closing before
-//                    each stim frame. Auto-falls back to closed-whole-stim (Serial warning) when frames
-//                    are too fast, i.e. requires framePeriod >= 2*shutterActuationMs + minImagingWindowMs.
-const bool useShutter       = true;
-const bool alternateShutter = false;
+//   useAlternatingShutter false = keep the shutter CLOSED for the whole stim; true = OPEN the shutter on
+//                    non-stim frames to image between stim frames, re-closing before each stim frame.
+//                    Auto-falls back to closed-whole-stim (Serial warning) when frames are too fast, i.e.
+//                    requires framePeriod >= 2*shutterActuationMs + minImagingWindowMs.
+const bool useAlternatingShutter = false;
 
 // Frame source:
 //   useInternalFrameGen false = use the external 2P frame sync on framePeriodPin (pin 31).
@@ -86,7 +83,7 @@ const unsigned long stimStartWatchdogFloorMs = 3000;
 unsigned long stimStartWatchdogRunMs = stimStartWatchdogFloorMs;
 
 // Per-frame shutter alternation state (loop() only)
-bool alternateShutterActive = false;             // runtime: useShutter && alternateShutter && frame rate feasible
+bool alternatingShutterActive = false;             // runtime: useAlternatingShutter && frame rate feasible
 unsigned long lastShutterFrame = 0;
 unsigned long shutterFrameCloseAt = 0;           // millis() deadline to CLOSE before the next stim frame (0 = none)
 unsigned long optoArmAt = 0;                     // millis() deadline to arm opto after a close settles (0 = none)
@@ -103,10 +100,9 @@ unsigned long lastPrintTime = 0;
 const unsigned long printInterval = 5000;
 
 // ---- Helpers --------------------------------------------------------------------------------------
-// Drive the PMT shutter, honoring the useShutter master switch. When useShutter is false the shutter is
-// never CLOSED (stim runs with no PMT protection); opening (LOW = safe/default) is always asserted.
+// Drive the PMT shutter. HIGH = CLOSED (PMTs protected), LOW = OPEN. Every operational shutter write goes
+// through here (the boot LOW in setup() stays a direct digitalWrite).
 void setShutter(bool closed) {
-  if (closed && !useShutter) return;
   digitalWrite(shutterPin, closed ? HIGH : LOW);
 }
 
@@ -134,8 +130,7 @@ void setup() {
 
   Serial.begin(115200);
   Serial.print("AlternatingFrameOpto v2 | useAlternatingFrames="); Serial.print(useAlternatingFrames);
-  Serial.print(" useShutter="); Serial.print(useShutter);
-  Serial.print(" alternateShutter="); Serial.print(alternateShutter);
+  Serial.print(" useAlternatingShutter="); Serial.print(useAlternatingShutter);
   Serial.print(" useInternalFrameGen="); Serial.print(useInternalFrameGen);
   Serial.print(" internalFrameRateHz="); Serial.println(internalFrameRateHz);
 
@@ -201,9 +196,9 @@ void loop() {
         if (4UL * framePeriodMs > stimStartWatchdogRunMs) stimStartWatchdogRunMs = 4UL * framePeriodMs;
         // Per-frame alternation only if an imaging window remains after the shutter closes/opens each frame.
         // framePeriodMs == 0 means no period has been measured yet -- distinct from "frames too fast".
-        alternateShutterActive = useShutter && alternateShutter && (framePeriodMs > 0) &&
+        alternatingShutterActive = useAlternatingShutter && (framePeriodMs > 0) &&
             (framePeriodMs >= (2UL * shutterActuationMs + minImagingWindowMs));
-        if (useShutter && alternateShutter && !alternateShutterActive) {
+        if (useAlternatingShutter && !alternatingShutterActive) {
           if (framePeriodMs == 0) {
             Serial.println("Alternate-shutter: no frame period measured yet -- shutter stays CLOSED for the whole stim.");
           } else {
@@ -217,13 +212,13 @@ void loop() {
       break;
     case SHUTTER_STIM:
       // Per-frame shutter alternation (if enabled and the frame rate allows it).
-      if (alternateShutterActive && stimulationActive) {
+      if (alternatingShutterActive && stimulationActive) {
         driveShutterPerFrame();
       }
       // Stim fully complete (both flags clear) -> disarm opto, ensure CLOSED, then run the lag pad.
       if (!stimulationPending && !stimulationActive) {
         forceOptoOff();
-        alternateShutterActive = false;
+        alternatingShutterActive = false;
         shutterFrameCloseAt = 0;
         optoArmAt = 0;
         setShutter(true);            // ensure CLOSED entering the lag pad (per-frame may have opened it)
@@ -239,7 +234,7 @@ void loop() {
         interrupts();
         if (!startedInTime) {
           optoArmed = false;
-          alternateShutterActive = false;
+          alternatingShutterActive = false;
           setShutter(false);
           shutterPhase = SHUTTER_IDLE;
           Serial.println("Shutter sequencer: no frames started the stim -- shutter reopened (check frame source).");
