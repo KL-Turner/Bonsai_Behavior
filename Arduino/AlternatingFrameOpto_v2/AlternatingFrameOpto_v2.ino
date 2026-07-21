@@ -4,39 +4,16 @@
 // non-blockingly from loop() (driveOpto), so nothing busy-waits inside an interrupt.
 IntervalTimer frameGenTimer;  // internal frame clock (only when useInternalFrameGen)
 
-// Define pins
-const int framePeriodPin = 31;  // External 2P frame-sync input (used only when useInternalFrameGen == false)
-const int startPin       = 35;  // Start-stimulation trigger (brief "go" pulse) in
-const int optoPin        = 36;  // Optogenetic LED pulses out
-const int shutterPin     = 37;  // PMT shutter TTL (Bruker "Uncaging" BNC). Empirical: HIGH = CLOSED, LOW = OPEN.
+// ===================================================================================================
+//  ADJUSTABLE PARAMETERS  (modes, then opto, then shutter)
+// ===================================================================================================
 
-// Adjustable parameters
-const int durationSec = 2;                   // Duration (in seconds) of the stimulation
-const unsigned long shutterLeadMs = 100;     // PMT shutter closes this long BEFORE the stim (whole-stim wrap)
-const unsigned long shutterLagMs  = 100;     // PMT shutter opens this long AFTER the stim (whole-stim wrap)
-const unsigned long shutterActuationMs = 50; // Measured PMT shutter open/close time (per-frame alternation)
-const unsigned long shutterSettleMarginMs = 25; // Extra guard-band before arming opto in per-frame mode
-// Whole-stim opto arms after the lead pad, so the lead must cover the shutter's close time or opto could
-// fire before the shutter has physically settled closed.
-static_assert(shutterLeadMs >= shutterActuationMs, "shutterLeadMs must be >= shutterActuationMs");
-
-// Opto "carrier" pulse train, specified as frequency + pulse width (the standard optogenetic
-// parameterization). Duty cycle = optoPulseWidthMs * optoFreqHz (10% at 20 Hz / 5 ms). Keeping the pulse
-// WIDTH fixed when you change the frequency is the physiologically correct behavior -- short pulses evoke
-// clean single spikes; long (e.g. 50% duty) pulses risk depolarization block / ChR2 desensitization.
-constexpr float optoFreqHz       = 20.0f;  // opto carrier frequency (Hz)
-constexpr float optoPulseWidthMs = 5.0f;   // opto pulse width (ms); must be shorter than one period
-static_assert(optoPulseWidthMs * optoFreqHz < 1000.0f, "opto pulse width must be < one period (duty < 100%)");
-constexpr unsigned long optoPeriodUs = (unsigned long)(1000000.0f / optoFreqHz + 0.5f);
-constexpr unsigned long pulseOnUs    = (unsigned long)(optoPulseWidthMs * 1000.0f + 0.5f);
-constexpr unsigned long pulseOffUs   = optoPeriodUs - pulseOnUs;
-
-// ---- Mode switches --------------------------------------------------------------------------------
+// ---- Stimulus MODE switches -----------------------------------------------------------------------
 // Stimulus pattern:
 //   useAlternatingFrames true  = frame-locked ALTERNATING pattern -- opto fires on odd frames only, off
 //                               on even frames (needs a frame clock: real 2P or internal gen).
-//                        false = BYPASS -- a startPin pulse runs a simple continuous 5/45 ms train for
-//                               durationSec (no frame clock needed).
+//                        false = BYPASS -- a startPin pulse runs a simple continuous carrier train for
+//                               optoDurationSec (no frame clock needed).
 const bool useAlternatingFrames = true;
 
 // PMT shutter control:
@@ -55,6 +32,38 @@ const bool useAlternatingShutter = false;
 const bool useInternalFrameGen = false;
 const float internalFrameRateHz = 5.0;       // internal frame-gen rate (Hz); Prairie-View-like training default
 const unsigned long internalFramePeriodUs = (unsigned long)(1000000.0 / internalFrameRateHz + 0.5);
+
+// ---- Opto parameters ------------------------------------------------------------------------------
+// Opto "carrier" pulse train, specified as duration + frequency + pulse width (the standard optogenetic
+// parameterization). Duty cycle = optoPulseWidthMs * optoFreqHz (10% at 20 Hz / 5 ms). Keeping the pulse
+// WIDTH fixed when you change the frequency is the physiologically correct behavior -- short pulses evoke
+// clean single spikes; long (e.g. 50% duty) pulses risk depolarization block / ChR2 desensitization.
+const int optoDurationSec        = 2;      // stimulation duration (s)
+constexpr float optoFreqHz       = 20.0f;  // opto carrier frequency (Hz)
+constexpr float optoPulseWidthMs = 5.0f;   // opto pulse width (ms); must be shorter than one period
+static_assert(optoPulseWidthMs * optoFreqHz < 1000.0f, "opto pulse width must be < one period (duty < 100%)");
+constexpr unsigned long optoPeriodUs = (unsigned long)(1000000.0f / optoFreqHz + 0.5f);
+constexpr unsigned long pulseOnUs    = (unsigned long)(optoPulseWidthMs * 1000.0f + 0.5f);
+constexpr unsigned long pulseOffUs   = optoPeriodUs - pulseOnUs;
+
+// ---- Shutter Adjustable parameters ----------------------------------------------------------------
+// (Rarely changed.) PMT shutter timing.
+const unsigned long shutterLeadMs = 100;        // PMT shutter closes this long BEFORE the stim (whole-stim wrap)
+const unsigned long shutterLagMs  = 100;        // PMT shutter opens this long AFTER the stim (whole-stim wrap)
+const unsigned long shutterActuationMs = 50;    // Measured PMT shutter open/close time (per-frame alternation)
+const unsigned long shutterSettleMarginMs = 25; // Extra guard-band before arming opto in per-frame mode
+const unsigned long minImagingWindowMs = 30;    // per-frame mode used only if the open window would exceed this
+// Whole-stim opto arms after the lead pad, so the lead must cover the shutter's close time or opto could
+// fire before the shutter has physically settled closed.
+static_assert(shutterLeadMs >= shutterActuationMs, "shutterLeadMs must be >= shutterActuationMs");
+
+// ===================================================================================================
+
+// Define pins
+const int framePeriodPin = 31;  // External 2P frame-sync input (used only when useInternalFrameGen == false)
+const int startPin       = 35;  // Start-stimulation trigger (brief "go" pulse) in
+const int optoPin        = 36;  // Optogenetic LED pulses out
+const int shutterPin     = 37;  // PMT shutter TTL (Bruker "Uncaging" BNC). Empirical: HIGH = CLOSED, LOW = OPEN.
 
 // ---- State ----------------------------------------------------------------------------------------
 // Frame timing (shared with the frame ISR / internal timer)
@@ -83,11 +92,10 @@ const unsigned long stimStartWatchdogFloorMs = 3000;
 unsigned long stimStartWatchdogRunMs = stimStartWatchdogFloorMs;
 
 // Per-frame shutter alternation state (loop() only)
-bool alternatingShutterActive = false;             // runtime: useAlternatingShutter && frame rate feasible
+bool alternatingShutterActive = false;           // runtime: useAlternatingShutter && frame rate feasible
 unsigned long lastShutterFrame = 0;
 unsigned long shutterFrameCloseAt = 0;           // millis() deadline to CLOSE before the next stim frame (0 = none)
 unsigned long optoArmAt = 0;                     // millis() deadline to arm opto after a close settles (0 = none)
-const unsigned long minImagingWindowMs = 30;     // per-frame mode used only if the open window would exceed this
 
 // Trigger debounce / rising-edge detect
 const unsigned long debounceInterval = 1000;
@@ -175,7 +183,7 @@ void loop() {
   }
 
   // Deactivate stimulation after the specified duration (force opto off first).
-  if (stimulationActive && (millis() - stimulationStartTime) >= (unsigned long)durationSec * 1000UL) {
+  if (stimulationActive && (millis() - stimulationStartTime) >= (unsigned long)optoDurationSec * 1000UL) {
     forceOptoOff();
     stimulationActive = false;
     stimulationStartTime = 0;
@@ -361,13 +369,13 @@ void driveShutterPerFrame() {
 
 // ---- Bypass mode ----------------------------------------------------------------------------------
 // useAlternatingFrames == false: a single blocking, shutter-wrapped continuous train. Shutter CLOSED ->
-// lead -> continuous opto carrier for durationSec -> lag -> shutter OPEN. Needs no frame clock. The
+// lead -> continuous opto carrier for optoDurationSec -> lag -> shutter OPEN. Needs no frame clock. The
 // loop-driven opto state machine (driveOpto) is not reached while this blocks, and stimulationActive is
 // false, so it never fights these direct optoPin writes.
 void generateShutteredStim() {
   // Whole opto periods that fit in the stim (floors; a partial final cycle is fine for the continuous
   // bypass train). At 2 s / 20 Hz this is 40.
-  const unsigned long numPulses = ((unsigned long)durationSec * 1000000UL) / optoPeriodUs;
+  const unsigned long numPulses = ((unsigned long)optoDurationSec * 1000000UL) / optoPeriodUs;
 
   Serial.println("Bypass stim: shutter CLOSED, lead, continuous 5/45 ms train, lag, shutter OPEN.");
   setShutter(true);
