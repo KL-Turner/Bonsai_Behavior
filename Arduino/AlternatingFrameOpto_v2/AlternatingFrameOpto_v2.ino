@@ -4,31 +4,26 @@
 // non-blockingly from loop() (driveOpto), so nothing busy-waits inside an interrupt.
 IntervalTimer frameGenTimer;  // internal frame clock (only when useInternalFrameGen)
 
-// ===================================================================================================
-//  ADJUSTABLE PARAMETERS  (modes, then opto, then shutter)
-// ===================================================================================================
-
 // ---- Stimulus MODE switches -----------------------------------------------------------------------
-// Stimulus pattern:
-//   useAlternatingFrames true  = frame-locked ALTERNATING pattern -- opto fires on odd frames only, off
-//                               on even frames (needs a frame clock: real 2P or internal gen).
-//                        false = BYPASS -- a startPin pulse runs a simple continuous carrier train for
-//                               optoDurationSec (no frame clock needed).
+// Stimulus pattern: useAlternatingFrames
+//   true  = frame-locked ALTERNATING pattern -- opto fires on odd (stim) frames only, off on even
+//           (imaging) frames. Needs a frame clock (real 2P or internal gen).
+//   false = BYPASS -- a startPin pulse runs a continuous carrier train for optoDurationSec (no
+//           frame clock needed).
 const bool useAlternatingFrames = true;
 
-// PMT shutter control:
-//   useAlternatingShutter false = keep the shutter CLOSED for the whole stim; true = OPEN the shutter on
-//                    non-stim frames to image between stim frames, re-closing before each stim frame.
-//                    Auto-falls back to closed-whole-stim (Serial warning) when frames are too fast, i.e.
-//                    requires framePeriod >= 2*shutterActuationMs + minImagingWindowMs.
+// PMT shutter control: useAlternatingShutter
+//   true  = OPEN the shutter on non-stim (imaging) frames and re-close before each stim frame, so you
+//           can image between stim frames. Auto-falls back to closed-whole-stim (Serial warning) when
+//           frames are too fast, i.e. requires framePeriod >= 2*shutterActuationMs + minImagingWindowMs.
+//   false = keep the shutter CLOSED for the whole stim.
 const bool useAlternatingShutter = false;
 
-// Frame source:
-//   useInternalFrameGen false = use the external 2P frame sync on framePeriodPin (pin 31).
-//                       true  = the Teensy generates the frame clock INTERNALLY in software at
-//                               internalFrameRateHz (nothing wired to pin 31) -- for training mice on a
-//                               Prairie-View-like flashing pattern with no microscope. Internal frames
-//                               feed the exact same stim + shutter pipeline, so every mode above applies.
+// Frame source: useInternalFrameGen
+//   true  = the Teensy generates the frame clock INTERNALLY in software at internalFrameRateHz (nothing
+//           wired to pin 31) -- for training mice on a Prairie-View-like flashing pattern with no
+//           microscope. Internal frames feed the same stim + shutter pipeline, so every mode applies.
+//   false = use the external 2P frame sync on framePeriodPin (pin 31).
 const bool useInternalFrameGen = false;
 const float internalFrameRateHz = 5.0;       // internal frame-gen rate (Hz); Prairie-View-like training default
 const unsigned long internalFramePeriodUs = (unsigned long)(1000000.0 / internalFrameRateHz + 0.5);
