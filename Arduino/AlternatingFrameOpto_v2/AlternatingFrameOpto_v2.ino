@@ -1,8 +1,8 @@
 #include <IntervalTimer.h>
 
-// Hardware timer for the internal (simulated) frame clock. The opto pulse train is generated
-// non-blockingly from loop() (driveOpto), so nothing busy-waits inside an interrupt.
-IntervalTimer frameGenTimer;  // internal frame clock (only when useInternalFrameGen)
+// ===================================================================================================
+//  ADJUSTABLE PARAMETERS  (modes, then opto, then shutter)
+// ===================================================================================================
 
 // ---- Stimulus MODE switches -----------------------------------------------------------------------
 // Stimulus pattern: useAlternatingFrames
@@ -26,7 +26,6 @@ const bool useAlternatingShutter = false;
 //   false = use the external 2P frame sync on framePeriodPin (pin 31).
 const bool useInternalFrameGen = false;
 const float internalFrameRateHz = 5.0;       // internal frame-gen rate (Hz); Prairie-View-like training default
-const unsigned long internalFramePeriodUs = (unsigned long)(1000000.0 / internalFrameRateHz + 0.5);
 
 // ---- Opto parameters ------------------------------------------------------------------------------
 // Opto "carrier" pulse train, specified as duration + frequency + pulse width (the standard optogenetic
@@ -36,10 +35,6 @@ const unsigned long internalFramePeriodUs = (unsigned long)(1000000.0 / internal
 const int optoDurationSec        = 2;      // stimulation duration (s)
 constexpr float optoFreqHz       = 20.0f;  // opto carrier frequency (Hz)
 constexpr float optoPulseWidthMs = 5.0f;   // opto pulse width (ms); must be shorter than one period
-static_assert(optoPulseWidthMs * optoFreqHz < 1000.0f, "opto pulse width must be < one period (duty < 100%)");
-constexpr unsigned long optoPeriodUs = (unsigned long)(1000000.0f / optoFreqHz + 0.5f);
-constexpr unsigned long pulseOnUs    = (unsigned long)(optoPulseWidthMs * 1000.0f + 0.5f);
-constexpr unsigned long pulseOffUs   = optoPeriodUs - pulseOnUs;
 
 // ---- Shutter Adjustable parameters ----------------------------------------------------------------
 // (Rarely changed.) PMT shutter timing.
@@ -60,7 +55,17 @@ const int startPin       = 35;  // Start-stimulation trigger (brief "go" pulse) 
 const int optoPin        = 36;  // Optogenetic LED pulses out
 const int shutterPin     = 37;  // PMT shutter TTL (Bruker "Uncaging" BNC). Empirical: HIGH = CLOSED, LOW = OPEN.
 
+// ---- Derived constants (computed from the parameters above; not meant to be edited) ---------------
+static_assert(optoPulseWidthMs * optoFreqHz < 1000.0f, "opto pulse width must be < one period (duty < 100%)");
+constexpr unsigned long optoPeriodUs = (unsigned long)(1000000.0f / optoFreqHz + 0.5f);    // opto carrier period (us)
+constexpr unsigned long pulseOnUs    = (unsigned long)(optoPulseWidthMs * 1000.0f + 0.5f); // LED ON per pulse (us)
+constexpr unsigned long pulseOffUs   = optoPeriodUs - pulseOnUs;                           // LED OFF per pulse (us)
+const unsigned long internalFramePeriodUs = (unsigned long)(1000000.0 / internalFrameRateHz + 0.5); // internal frame period (us)
+
 // ---- State ----------------------------------------------------------------------------------------
+// Hardware timer for the internal (simulated) frame clock (used only when useInternalFrameGen).
+IntervalTimer frameGenTimer;
+
 // Frame timing (shared with the frame ISR / internal timer)
 volatile unsigned long frameCounter = 0;
 volatile unsigned long framePeriod = 0;          // most recent frame period (us)
