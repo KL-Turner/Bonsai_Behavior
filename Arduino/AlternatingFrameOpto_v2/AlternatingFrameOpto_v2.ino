@@ -18,13 +18,16 @@ const bool useAlternatingFrames = true;
 //   false = keep the shutter CLOSED for the whole stim.
 const bool useAlternatingShutter = false;
 
-// Frame source: useInternalFrameGen
-//   true  = the Teensy generates the frame clock INTERNALLY in software at internalFrameRateHz (nothing
-//           wired to pin 31) -- for training mice on a Prairie-View-like flashing pattern with no
-//           microscope. Internal frames feed the same stim + shutter pipeline, so every mode applies.
-//   false = use the external 2P frame sync on framePeriodPin (pin 31).
-const bool useInternalFrameGen = false;
-const float internalFrameRateHz = 5.0;       // internal frame-gen rate (Hz); Prairie-View-like training default
+// Frame source: frameSource
+//   FRAME_2P        = external PrairieView / 2P frame sync on twoPhotonFramePin (pin 31).
+//   FRAME_1P        = external Andor / 1P camera frame sync on onePhotonFramePin (pin 30).
+//   FRAME_SIMULATED = the Teensy generates the frame clock INTERNALLY in software at internalFrameRateHz
+//                     (nothing wired in, no jumper) -- for training mice on a Prairie-View-like flashing
+//                     pattern with no microscope.
+// All three feed the same stim + shutter pipeline, so every mode above applies identically.
+enum FrameSource { FRAME_2P, FRAME_1P, FRAME_SIMULATED };
+const FrameSource frameSource = FRAME_2P;
+const float internalFrameRateHz = 5.0;       // FRAME_SIMULATED frame rate (Hz); training default
 
 // ---- Opto parameters ------------------------------------------------------------------------------------
 // Opto "carrier" pulse train, specified as duration + frequency + pulse width (the standard optogenetic
@@ -39,7 +42,8 @@ constexpr float optoPulseWidthMs = 5.0f;   // opto pulse width (ms); must be sho
 // =========================================================================================================
 
 // Define pins
-const int framePeriodPin = 31;  // External 2P frame-sync input (used only when useInternalFrameGen == false)
+const int onePhotonFramePin = 30;  // Andor (1P) camera frame-sync input   -- used when frameSource == FRAME_1P
+const int twoPhotonFramePin = 31;  // PrairieView (2P) frame-sync input    -- used when frameSource == FRAME_2P
 const int startPin       = 35;  // Start-stimulation trigger (brief "go" pulse) in
 const int optoPin        = 36;  // Optogenetic LED pulses out
 const int shutterPin     = 37;  // PMT shutter TTL (Bruker "Uncaging" BNC). Empirical: HIGH = CLOSED, LOW = OPEN.
@@ -50,6 +54,7 @@ constexpr unsigned long optoPeriodUs = (unsigned long)(1000000.0f / optoFreqHz +
 constexpr unsigned long pulseOnUs    = (unsigned long)(optoPulseWidthMs * 1000.0f + 0.5f); // LED ON per pulse (us)
 constexpr unsigned long pulseOffUs   = optoPeriodUs - pulseOnUs;                           // LED OFF per pulse (us)
 const unsigned long internalFramePeriodUs = (unsigned long)(1000000.0 / internalFrameRateHz + 0.5); // internal frame period (us)
+const int frameInputPin = (frameSource == FRAME_1P) ? onePhotonFramePin : twoPhotonFramePin; // active frame-sync pin
 
 // ---- Shutter parameters ---------------------------------------------------------------------------------
 // (Rarely changed.) PMT shutter timing.
@@ -63,7 +68,7 @@ const unsigned long minImagingWindowMs = 30;    // per-frame mode used only if t
 static_assert(shutterLeadMs >= shutterActuationMs, "shutterLeadMs must be >= shutterActuationMs");
 
 // ---- State ----------------------------------------------------------------------------------------------
-// Hardware timer for the internal (simulated) frame clock (used only when useInternalFrameGen).
+// Hardware timer for the internal (simulated) frame clock (used only when frameSource == FRAME_SIMULATED).
 IntervalTimer frameGenTimer;
 
 // Frame timing (shared with the frame ISR / internal timer)
@@ -139,15 +144,17 @@ void setup() {
   Serial.begin(115200);
   Serial.print("AlternatingFrameOpto v2 | useAlternatingFrames="); Serial.print(useAlternatingFrames);
   Serial.print(" useAlternatingShutter="); Serial.print(useAlternatingShutter);
-  Serial.print(" useInternalFrameGen="); Serial.print(useInternalFrameGen);
-  Serial.print(" internalFrameRateHz="); Serial.println(internalFrameRateHz);
+  Serial.print(" frameSource=");
+  if (frameSource == FRAME_2P)        { Serial.println("2P (PrairieView, pin 31)"); }
+  else if (frameSource == FRAME_1P)   { Serial.println("1P (Andor, pin 30)"); }
+  else { Serial.print("SIMULATED @ "); Serial.print(internalFrameRateHz); Serial.println(" Hz"); }
 
-  // Frame source: internal software clock, or the external 2P sync on pin 31.
-  if (useInternalFrameGen) {
+  // Frame source: internal software clock, or an external camera/scope frame sync.
+  if (frameSource == FRAME_SIMULATED) {
     frameGenTimer.begin(internalFrameTick, internalFramePeriodUs);
   } else {
-    pinMode(framePeriodPin, INPUT);
-    attachInterrupt(digitalPinToInterrupt(framePeriodPin), measureFramePeriod, CHANGE);
+    pinMode(frameInputPin, INPUT);
+    attachInterrupt(digitalPinToInterrupt(frameInputPin), measureFramePeriod, CHANGE);
   }
 
   startTime = millis();
@@ -278,11 +285,11 @@ void onNewFrame() {
   }
 }
 
-// External 2P frame sync (CHANGE on pin 31). Counts a frame on each rising edge and measures the frame
-// period (high + low) on the falling edge.
+// External frame sync (CHANGE on frameInputPin: pin 31 for 2P, pin 30 for 1P). Counts a frame on each
+// rising edge and measures the frame period (high + low) on the falling edge.
 void measureFramePeriod() {
   unsigned long currentTime = micros();
-  if (digitalRead(framePeriodPin) == HIGH) {        // rising edge = start of a new frame
+  if (digitalRead(frameInputPin) == HIGH) {         // rising edge = start of a new frame
     if (!measuringHigh) {
       frameLowDuration = currentTime - lastFrameRiseTime;
       measuringHigh = true;
