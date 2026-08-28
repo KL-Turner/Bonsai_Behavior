@@ -11,7 +11,7 @@ const int optoPin        = 36;  // Optogenetic LED pulses out
 const int shutterPin     = 37;  // PMT shutter TTL (Bruker "Uncaging" BNC). Empirical: HIGH = CLOSED, LOW = OPEN.
 
 // Adjustable parameters
-const int durationSec = 2;                   // Duration (in seconds) of the stimulation
+const int durationSec = 1;                   // Duration (in seconds) of the stimulation
 const unsigned long shutterLeadMs = 100;     // PMT shutter closes this long BEFORE the stim (whole-stim wrap)
 const unsigned long shutterLagMs  = 100;     // PMT shutter opens this long AFTER the stim (whole-stim wrap)
 const unsigned long shutterActuationMs = 50; // Measured PMT shutter open/close time (per-frame alternation)
@@ -37,7 +37,7 @@ constexpr unsigned long pulseOffUs   = optoPeriodUs - pulseOnUs;
 //                               on even frames (needs a frame clock: real 2P or internal gen).
 //                        false = BYPASS -- a startPin pulse runs a simple continuous 5/45 ms train for
 //                               durationSec (no frame clock needed).
-const bool useAlternatingFrames = true;
+const bool useAlternatingFrames = false;
 
 // PMT shutter control:
 //   useShutter       false = never CLOSE the shutter (pin 37 stays LOW/open); the stim runs with NO PMT
