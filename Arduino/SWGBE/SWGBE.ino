@@ -49,7 +49,7 @@ void setup() {
   Wire.begin();
   
   // Try to initialize
-  if (!mcp.begin(0x64)) {
+  if (!mcp.begin(0x60)) {
     Serial.println("Failed to find MCP4728 chip"); 
   } else{
     Serial.println("Found MCP4728 chip");

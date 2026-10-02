@@ -5,10 +5,8 @@
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:num="clr-namespace:Bonsai.Numerics;assembly=Bonsai.Numerics"
                  xmlns:p1="clr-namespace:Bonsai.Numerics.Distributions;assembly=Bonsai.Numerics"
-                 xmlns:vid="clr-namespace:Bonsai.Video;assembly=Bonsai.Video"
-                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
-                 xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
                  xmlns:viz="clr-namespace:Bonsai.Design.Visualizers;assembly=Bonsai.Design.Visualizers"
+                 xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -30,7 +28,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Timer">
-          <rx:DueTime>PT40M</rx:DueTime>
+          <rx:DueTime>PT5M</rx:DueTime>
           <rx:Period>PT0S</rx:Period>
         </Combinator>
       </Expression>
@@ -49,7 +47,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="ard:DigitalOutput">
           <ard:PortName>Teensy 4.1</ard:PortName>
-          <ard:Pin>10</ard:Pin>
+          <ard:Pin>32</ard:Pin>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -65,7 +63,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="ard:DigitalOutput">
           <ard:PortName>Teensy 4.1</ard:PortName>
-          <ard:Pin>10</ard:Pin>
+          <ard:Pin>32</ard:Pin>
         </Combinator>
       </Expression>
       <Expression xsi:type="Annotation">
@@ -74,7 +72,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="ard:DigitalInput">
-          <ard:Pin>12</ard:Pin>
+          <ard:Pin>0</ard:Pin>
         </Combinator>
       </Expression>
       <Expression xsi:type="Annotation">
@@ -83,8 +81,8 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Timer">
-          <rx:DueTime>PT2S</rx:DueTime>
-          <rx:Period>PT2S</rx:Period>
+          <rx:DueTime>PT0S</rx:DueTime>
+          <rx:Period>PT0S</rx:Period>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -220,7 +218,7 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="ard:DigitalOutput">
                 <ard:PortName>Teensy 4.1</ard:PortName>
-                <ard:Pin>26</ard:Pin>
+                <ard:Pin>32</ard:Pin>
               </Combinator>
             </Expression>
             <Expression xsi:type="WorkflowOutput" />
@@ -239,7 +237,6 @@
       </Expression>
       <Expression xsi:type="rx:SelectMany">
         <Name>Random ITI</Name>
-        <Description />
         <Workflow>
           <Nodes>
             <Expression xsi:type="Combinator">
@@ -249,8 +246,8 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>7</p1:Lower>
-                <p1:Upper>12</p1:Upper>
+                <p1:Lower>2</p1:Lower>
+                <p1:Upper>7</p1:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -278,7 +275,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Delay">
-          <rx:DueTime>PT10.8293473S</rx:DueTime>
+          <rx:DueTime>PT4.9919288S</rx:DueTime>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -289,49 +286,6 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:TakeUntil" />
-      </Expression>
-      <Expression xsi:type="Annotation">
-        <Name>Behavior Camera</Name>
-        <Text><![CDATA[]]></Text>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="vid:VideoCaptureDevice">
-          <vid:Index>0</vid:Index>
-          <vid:CaptureProperties />
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>Recording Duration</Name>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:TakeUntil" />
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="cv:VideoWriter">
-          <cv:FileName>C:\Users\moorelabptop\Documents\BehaviorCam-</cv:FileName>
-          <cv:Suffix>Timestamp</cv:Suffix>
-          <cv:Buffered>true</cv:Buffered>
-          <cv:Overwrite>false</cv:Overwrite>
-          <cv:FourCC>FMP4</cv:FourCC>
-          <cv:FrameRate>30</cv:FrameRate>
-          <cv:FrameSize>
-            <cv:Width>640</cv:Width>
-            <cv:Height>480</cv:Height>
-          </cv:FrameSize>
-          <cv:ResizeInterpolation>NearestNeighbor</cv:ResizeInterpolation>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="vid:VideoCaptureDevice">
-          <vid:Index>0</vid:Index>
-          <vid:CaptureProperties>
-            <vid:CameraProperty>
-              <vid:Property>Exposure</vid:Property>
-              <vid:Value>0</vid:Value>
-              <vid:ControlFlags>Manual</vid:ControlFlags>
-            </vid:CameraProperty>
-          </vid:CaptureProperties>
-        </Combinator>
       </Expression>
       <Expression xsi:type="Annotation">
         <Name>Rotary Encoder</Name>
@@ -347,142 +301,6 @@
         <Combinator xsi:type="rx:SampleInterval">
           <rx:Interval>PT0.0000001S</rx:Interval>
         </Combinator>
-      </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>Recording Duration</Name>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:TakeUntil" />
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Timestamp" />
-      </Expression>
-      <Expression xsi:type="io:CsvWriter">
-        <io:FileName>C:\Users\moorelabptop\Documents\RotaryEncoder-.csv</io:FileName>
-        <io:Append>false</io:Append>
-        <io:Overwrite>false</io:Overwrite>
-        <io:Suffix>Timestamp</io:Suffix>
-        <io:IncludeHeader>false</io:IncludeHeader>
-      </Expression>
-      <Expression xsi:type="viz:RollingGraphBuilder">
-        <viz:IndexSelector />
-        <viz:ValueSelector />
-        <viz:SymbolType>None</viz:SymbolType>
-        <viz:LineWidth>1</viz:LineWidth>
-        <viz:Capacity>10000</viz:Capacity>
-        <viz:Min>0</viz:Min>
-        <viz:Max>1200</viz:Max>
-      </Expression>
-      <Expression xsi:type="Annotation">
-        <Name>Capacitive Sensor</Name>
-        <Text><![CDATA[]]></Text>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="ard:AnalogInput">
-          <ard:PortName>Teensy 4.1</ard:PortName>
-          <ard:Pin>8</ard:Pin>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:SampleInterval">
-          <rx:Interval>PT0.0000001S</rx:Interval>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>Recording Duration</Name>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:TakeUntil" />
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Timestamp" />
-      </Expression>
-      <Expression xsi:type="io:CsvWriter">
-        <io:FileName>C:\Users\moorelabptop\Documents\CapacitiveSensor-.csv</io:FileName>
-        <io:Append>false</io:Append>
-        <io:Overwrite>false</io:Overwrite>
-        <io:Suffix>Timestamp</io:Suffix>
-        <io:IncludeHeader>false</io:IncludeHeader>
-      </Expression>
-      <Expression xsi:type="viz:RollingGraphBuilder">
-        <viz:IndexSelector />
-        <viz:ValueSelector />
-        <viz:SymbolType>None</viz:SymbolType>
-        <viz:LineWidth>1</viz:LineWidth>
-        <viz:Capacity>10000</viz:Capacity>
-        <viz:Min>0</viz:Min>
-        <viz:Max>1200</viz:Max>
-      </Expression>
-      <Expression xsi:type="Annotation">
-        <Name>Vibrissae Piezo</Name>
-        <Text><![CDATA[]]></Text>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="ard:AnalogInput">
-          <ard:PortName>Teensy 4.1</ard:PortName>
-          <ard:Pin>6</ard:Pin>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:SampleInterval">
-          <rx:Interval>PT0.0000001S</rx:Interval>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>Recording Duration</Name>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:TakeUntil" />
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Timestamp" />
-      </Expression>
-      <Expression xsi:type="io:CsvWriter">
-        <io:FileName>C:\Users\moorelabptop\Documents\VibrissaePiezo-.csv</io:FileName>
-        <io:Append>false</io:Append>
-        <io:Overwrite>false</io:Overwrite>
-        <io:Suffix>Timestamp</io:Suffix>
-        <io:IncludeHeader>false</io:IncludeHeader>
-      </Expression>
-      <Expression xsi:type="viz:RollingGraphBuilder">
-        <viz:IndexSelector />
-        <viz:ValueSelector />
-        <viz:SymbolType>None</viz:SymbolType>
-        <viz:LineWidth>1</viz:LineWidth>
-        <viz:Capacity>10000</viz:Capacity>
-        <viz:Min>0</viz:Min>
-        <viz:Max>1200</viz:Max>
-      </Expression>
-      <Expression xsi:type="Annotation">
-        <Name>Reward Solenoid</Name>
-        <Text><![CDATA[]]></Text>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="ard:AnalogInput">
-          <ard:PortName>Teensy 4.1</ard:PortName>
-          <ard:Pin>3</ard:Pin>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:SampleInterval">
-          <rx:Interval>PT0.0000001S</rx:Interval>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>Recording Duration</Name>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:TakeUntil" />
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Timestamp" />
-      </Expression>
-      <Expression xsi:type="io:CsvWriter">
-        <io:FileName>C:\Users\moorelabptop\Documents\RewardSolenoid-.csv</io:FileName>
-        <io:Append>false</io:Append>
-        <io:Overwrite>false</io:Overwrite>
-        <io:Suffix>Timestamp</io:Suffix>
-        <io:IncludeHeader>false</io:IncludeHeader>
       </Expression>
       <Expression xsi:type="viz:RollingGraphBuilder">
         <viz:IndexSelector />
@@ -500,13 +318,101 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="ard:AnalogInput">
           <ard:PortName>Teensy 4.1</ard:PortName>
-          <ard:Pin>1</ard:Pin>
+          <ard:Pin>0</ard:Pin>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:SampleInterval">
           <rx:Interval>PT0.0000001S</rx:Interval>
         </Combinator>
+      </Expression>
+      <Expression xsi:type="viz:RollingGraphBuilder">
+        <viz:IndexSelector />
+        <viz:ValueSelector />
+        <viz:SymbolType>None</viz:SymbolType>
+        <viz:LineWidth>1</viz:LineWidth>
+        <viz:Capacity>10000</viz:Capacity>
+        <viz:Min>0</viz:Min>
+        <viz:Max>1200</viz:Max>
+      </Expression>
+      <Expression xsi:type="Annotation">
+        <Name>Capacitive Sensor</Name>
+        <Text><![CDATA[]]></Text>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="ard:AnalogInput">
+          <ard:PortName>Teensy 4.1</ard:PortName>
+          <ard:Pin>0</ard:Pin>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:SampleInterval">
+          <rx:Interval>PT0.0000001S</rx:Interval>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="viz:RollingGraphBuilder">
+        <viz:IndexSelector />
+        <viz:ValueSelector />
+        <viz:SymbolType>None</viz:SymbolType>
+        <viz:LineWidth>1</viz:LineWidth>
+        <viz:Capacity>10000</viz:Capacity>
+        <viz:Min>0</viz:Min>
+        <viz:Max>1200</viz:Max>
+      </Expression>
+      <Expression xsi:type="Annotation">
+        <Name>Vibrissae Piezo</Name>
+        <Text><![CDATA[]]></Text>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="ard:AnalogInput">
+          <ard:PortName>Teensy 4.1</ard:PortName>
+          <ard:Pin>0</ard:Pin>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:SampleInterval">
+          <rx:Interval>PT0.0000001S</rx:Interval>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="viz:RollingGraphBuilder">
+        <viz:IndexSelector />
+        <viz:ValueSelector />
+        <viz:SymbolType>None</viz:SymbolType>
+        <viz:LineWidth>1</viz:LineWidth>
+        <viz:Capacity>10000</viz:Capacity>
+        <viz:Min>0</viz:Min>
+        <viz:Max>1200</viz:Max>
+      </Expression>
+      <Expression xsi:type="Annotation">
+        <Name>Reward Solenoid</Name>
+        <Text><![CDATA[]]></Text>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="ard:AnalogInput">
+          <ard:PortName>Teensy 4.1</ard:PortName>
+          <ard:Pin>6</ard:Pin>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:SampleInterval">
+          <rx:Interval>PT0.0000001S</rx:Interval>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="viz:RollingGraphBuilder">
+        <viz:IndexSelector />
+        <viz:ValueSelector />
+        <viz:SymbolType>None</viz:SymbolType>
+        <viz:LineWidth>1</viz:LineWidth>
+        <viz:Capacity>10000</viz:Capacity>
+        <viz:Min>0</viz:Min>
+        <viz:Max>1200</viz:Max>
+      </Expression>
+      <Expression xsi:type="Annotation">
+        <Name>Stream Channels</Name>
+        <Text><![CDATA[]]></Text>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Zip" />
       </Expression>
       <Expression xsi:type="SubscribeSubject">
         <Name>Recording Duration</Name>
@@ -518,20 +424,11 @@
         <Combinator xsi:type="rx:Timestamp" />
       </Expression>
       <Expression xsi:type="io:CsvWriter">
-        <io:FileName>C:\Users\moorelabptop\Documents\FrameCounter-.csv</io:FileName>
+        <io:FileName>Data.csv</io:FileName>
         <io:Append>false</io:Append>
-        <io:Overwrite>false</io:Overwrite>
-        <io:Suffix>Timestamp</io:Suffix>
+        <io:Overwrite>true</io:Overwrite>
+        <io:Suffix>None</io:Suffix>
         <io:IncludeHeader>false</io:IncludeHeader>
-      </Expression>
-      <Expression xsi:type="viz:RollingGraphBuilder">
-        <viz:IndexSelector />
-        <viz:ValueSelector />
-        <viz:SymbolType>None</viz:SymbolType>
-        <viz:LineWidth>1</viz:LineWidth>
-        <viz:Capacity>10000</viz:Capacity>
-        <viz:Min>0</viz:Min>
-        <viz:Max>1200</viz:Max>
       </Expression>
     </Nodes>
     <Edges>
@@ -561,44 +458,30 @@
       <Edge From="25" To="27" Label="Source1" />
       <Edge From="26" To="27" Label="Source2" />
       <Edge From="28" To="29" Label="Source1" />
-      <Edge From="29" To="31" Label="Source1" />
-      <Edge From="30" To="31" Label="Source2" />
-      <Edge From="31" To="32" Label="Source1" />
+      <Edge From="29" To="30" Label="Source1" />
+      <Edge From="30" To="31" Label="Source1" />
+      <Edge From="30" To="49" Label="Source6" />
+      <Edge From="32" To="33" Label="Source1" />
+      <Edge From="33" To="34" Label="Source1" />
       <Edge From="34" To="35" Label="Source1" />
-      <Edge From="35" To="36" Label="Source1" />
-      <Edge From="36" To="38" Label="Source1" />
-      <Edge From="37" To="38" Label="Source2" />
+      <Edge From="34" To="49" Label="Source5" />
+      <Edge From="36" To="37" Label="Source1" />
+      <Edge From="37" To="38" Label="Source1" />
       <Edge From="38" To="39" Label="Source1" />
-      <Edge From="38" To="41" Label="Source1" />
-      <Edge From="39" To="40" Label="Source1" />
+      <Edge From="38" To="49" Label="Source4" />
+      <Edge From="40" To="41" Label="Source1" />
+      <Edge From="41" To="42" Label="Source1" />
       <Edge From="42" To="43" Label="Source1" />
-      <Edge From="43" To="44" Label="Source1" />
-      <Edge From="44" To="46" Label="Source1" />
-      <Edge From="45" To="46" Label="Source2" />
+      <Edge From="42" To="49" Label="Source3" />
+      <Edge From="44" To="45" Label="Source1" />
+      <Edge From="45" To="46" Label="Source1" />
       <Edge From="46" To="47" Label="Source1" />
-      <Edge From="46" To="49" Label="Source1" />
-      <Edge From="47" To="48" Label="Source1" />
-      <Edge From="50" To="51" Label="Source1" />
+      <Edge From="46" To="49" Label="Source2" />
+      <Edge From="48" To="49" Label="Source1" />
+      <Edge From="49" To="51" Label="Source1" />
+      <Edge From="50" To="51" Label="Source2" />
       <Edge From="51" To="52" Label="Source1" />
-      <Edge From="52" To="54" Label="Source1" />
-      <Edge From="53" To="54" Label="Source2" />
-      <Edge From="54" To="55" Label="Source1" />
-      <Edge From="54" To="57" Label="Source1" />
-      <Edge From="55" To="56" Label="Source1" />
-      <Edge From="58" To="59" Label="Source1" />
-      <Edge From="59" To="60" Label="Source1" />
-      <Edge From="60" To="62" Label="Source1" />
-      <Edge From="61" To="62" Label="Source2" />
-      <Edge From="62" To="63" Label="Source1" />
-      <Edge From="62" To="65" Label="Source1" />
-      <Edge From="63" To="64" Label="Source1" />
-      <Edge From="66" To="67" Label="Source1" />
-      <Edge From="67" To="68" Label="Source1" />
-      <Edge From="68" To="70" Label="Source1" />
-      <Edge From="69" To="70" Label="Source2" />
-      <Edge From="70" To="71" Label="Source1" />
-      <Edge From="70" To="73" Label="Source1" />
-      <Edge From="71" To="72" Label="Source1" />
+      <Edge From="52" To="53" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
