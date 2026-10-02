@@ -7,6 +7,8 @@
                  xmlns:p1="clr-namespace:Bonsai.Numerics.Distributions;assembly=Bonsai.Numerics"
                  xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
                  xmlns:viz="clr-namespace:Bonsai.Design.Visualizers;assembly=Bonsai.Design.Visualizers"
+                 xmlns:pgr="clr-namespace:Bonsai.PointGrey;assembly=Bonsai.PointGrey"
+                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -17,7 +19,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="ard:CreateArduino">
           <ard:Name>Teensy 4.1</ard:Name>
-          <ard:PortName>COM6</ard:PortName>
+          <ard:PortName>COM4</ard:PortName>
           <ard:BaudRate>57600</ard:BaudRate>
           <ard:SamplingInterval>1</ard:SamplingInterval>
         </Combinator>
@@ -28,7 +30,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Timer">
-          <rx:DueTime>PT15M</rx:DueTime>
+          <rx:DueTime>PT5M</rx:DueTime>
           <rx:Period>PT0S</rx:Period>
         </Combinator>
       </Expression>
@@ -47,7 +49,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="ard:DigitalOutput">
           <ard:PortName>Teensy 4.1</ard:PortName>
-          <ard:Pin>9</ard:Pin>
+          <ard:Pin>10</ard:Pin>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -63,7 +65,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="ard:DigitalOutput">
           <ard:PortName>Teensy 4.1</ard:PortName>
-          <ard:Pin>9</ard:Pin>
+          <ard:Pin>10</ard:Pin>
         </Combinator>
       </Expression>
       <Expression xsi:type="Annotation">
@@ -114,8 +116,8 @@
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="p1:CreateContinuousUniform">
-                <p1:Lower>15</p1:Lower>
-                <p1:Upper>30</p1:Upper>
+                <p1:Lower>10</p1:Lower>
+                <p1:Upper>15</p1:Upper>
               </Combinator>
             </Expression>
             <Expression xsi:type="Combinator">
@@ -143,7 +145,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Delay">
-          <rx:DueTime>PT11.0782976S</rx:DueTime>
+          <rx:DueTime>PT11.992234S</rx:DueTime>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -154,46 +156,6 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:TakeUntil" />
-      </Expression>
-      <Expression xsi:type="Annotation">
-        <Name>Rotary Encoder</Name>
-        <Text><![CDATA[]]></Text>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="ard:AnalogInput">
-          <ard:PortName>Teensy 4.1</ard:PortName>
-          <ard:Pin>5</ard:Pin>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:SampleInterval">
-          <rx:Interval>PT0.0000001S</rx:Interval>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>Recording Duration</Name>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:TakeUntil" />
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="rx:Timestamp" />
-      </Expression>
-      <Expression xsi:type="io:CsvWriter">
-        <io:FileName>C:\Users\moorelabptop\Documents\RotaryEncoder-.csv</io:FileName>
-        <io:Append>false</io:Append>
-        <io:Overwrite>false</io:Overwrite>
-        <io:Suffix>Timestamp</io:Suffix>
-        <io:IncludeHeader>false</io:IncludeHeader>
-      </Expression>
-      <Expression xsi:type="viz:RollingGraphBuilder">
-        <viz:IndexSelector />
-        <viz:ValueSelector />
-        <viz:SymbolType>None</viz:SymbolType>
-        <viz:LineWidth>1</viz:LineWidth>
-        <viz:Capacity>10000</viz:Capacity>
-        <viz:Min>0</viz:Min>
-        <viz:Max>1200</viz:Max>
       </Expression>
       <Expression xsi:type="Annotation">
         <Name>Vibrissae Piezo</Name>
@@ -220,7 +182,7 @@
         <Combinator xsi:type="rx:Timestamp" />
       </Expression>
       <Expression xsi:type="io:CsvWriter">
-        <io:FileName>C:\Users\moorelabptop\Documents\VibrissaePiezo-.csv</io:FileName>
+        <io:FileName>C:\Users\moorelabptop\Documents\Bonsai Temp Data\VibrissaePiezo-.csv</io:FileName>
         <io:Append>false</io:Append>
         <io:Overwrite>false</io:Overwrite>
         <io:Suffix>Timestamp</io:Suffix>
@@ -260,7 +222,7 @@
         <Combinator xsi:type="rx:Timestamp" />
       </Expression>
       <Expression xsi:type="io:CsvWriter">
-        <io:FileName>C:\Users\moorelabptop\Documents\FrameCounter-.csv</io:FileName>
+        <io:FileName>C:\Users\moorelabptop\Documents\Bonsai Temp Data\FrameCounter-.csv</io:FileName>
         <io:Append>false</io:Append>
         <io:Overwrite>false</io:Overwrite>
         <io:Suffix>Timestamp</io:Suffix>
@@ -274,6 +236,42 @@
         <viz:Capacity>10000</viz:Capacity>
         <viz:Min>0</viz:Min>
         <viz:Max>1200</viz:Max>
+      </Expression>
+      <Expression xsi:type="Annotation">
+        <Name>Behavior Camera</Name>
+        <Text><![CDATA[]]></Text>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="pgr:FlyCapture">
+          <pgr:Index>0</pgr:Index>
+          <pgr:ColorProcessing>NoColorProcessing</pgr:ColorProcessing>
+          <pgr:NumBuffers>10</pgr:NumBuffers>
+          <pgr:GrabMode>BufferFrames</pgr:GrabMode>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="MemberSelector">
+        <Selector>Image</Selector>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>Recording Duration</Name>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:TakeUntil" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="cv:VideoWriter">
+          <cv:FileName>C:\Users\moorelabptop\Documents\Bonsai Temp Data\BehaviorCam-.avi</cv:FileName>
+          <cv:Suffix>Timestamp</cv:Suffix>
+          <cv:Buffered>true</cv:Buffered>
+          <cv:Overwrite>false</cv:Overwrite>
+          <cv:FourCC>FMP4</cv:FourCC>
+          <cv:FrameRate>30</cv:FrameRate>
+          <cv:FrameSize>
+            <cv:Width>1280</cv:Width>
+            <cv:Height>1024</cv:Height>
+          </cv:FrameSize>
+          <cv:ResizeInterpolation>NearestNeighbor</cv:ResizeInterpolation>
+        </Combinator>
       </Expression>
     </Nodes>
     <Edges>
@@ -317,8 +315,6 @@
       <Edge From="42" To="44" Label="Source1" />
       <Edge From="43" To="44" Label="Source2" />
       <Edge From="44" To="45" Label="Source1" />
-      <Edge From="44" To="47" Label="Source1" />
-      <Edge From="45" To="46" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>

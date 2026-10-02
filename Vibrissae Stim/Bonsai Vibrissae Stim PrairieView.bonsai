@@ -17,7 +17,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="ard:CreateArduino">
           <ard:Name>Teensy 4.1</ard:Name>
-          <ard:PortName>COM18</ard:PortName>
+          <ard:PortName>COM6</ard:PortName>
           <ard:BaudRate>57600</ard:BaudRate>
           <ard:SamplingInterval>1</ard:SamplingInterval>
         </Combinator>
@@ -28,7 +28,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Timer">
-          <rx:DueTime>PT10M</rx:DueTime>
+          <rx:DueTime>PT15M</rx:DueTime>
           <rx:Period>PT0S</rx:Period>
         </Combinator>
       </Expression>

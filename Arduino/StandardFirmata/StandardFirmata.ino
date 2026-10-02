@@ -23,50 +23,50 @@
   Last updated August 17th, 2017
 */
 
-#define TEENSY41
 #include <Servo.h>
-#include <Boards.h>
 #include <Wire.h>
 #include <Firmata.h>
 
-#define I2C_WRITE                   B00000000
-#define I2C_READ                    B00001000
-#define I2C_READ_CONTINUOUSLY       B00010000
-#define I2C_STOP_READING            B00011000
-#define I2C_READ_WRITE_MODE_MASK    B00011000
+#define I2C_WRITE B00000000
+#define I2C_READ B00001000
+#define I2C_READ_CONTINUOUSLY B00010000
+#define I2C_STOP_READING B00011000
+#define I2C_READ_WRITE_MODE_MASK B00011000
 #define I2C_10BIT_ADDRESS_MODE_MASK B00100000
-#define I2C_END_TX_MASK             B01000000
-#define I2C_STOP_TX                 1
-#define I2C_RESTART_TX              0
-#define I2C_MAX_QUERIES             8
-#define I2C_REGISTER_NOT_SPECIFIED  -1
+#define I2C_END_TX_MASK B01000000
+#define I2C_STOP_TX 1
+#define I2C_RESTART_TX 0
+#define I2C_MAX_QUERIES 8
+#define I2C_REGISTER_NOT_SPECIFIED -1
 
 // the minimum interval for sampling analog input
-#define MINIMUM_SAMPLING_INTERVAL   1
+#define MINIMUM_SAMPLING_INTERVAL 1
 
 
 /*==============================================================================
  * GLOBAL VARIABLES
  *============================================================================*/
 
+bool boardIdentified = false;  // Ensure message prints only once
+
 #ifdef FIRMATA_SERIAL_FEATURE
 SerialFirmata serialFeature;
 #endif
 
 /* analog inputs */
-int analogInputsToReport = 0; // bitwise array to store pin reporting
+int analogInputsToReport = 0;  // bitwise array to store pin reporting
 
 /* digital input ports */
-byte reportPINs[TOTAL_PORTS];       // 1 = report this port, 0 = silence
-byte previousPINs[TOTAL_PORTS];     // previous 8 bits sent
+byte reportPINs[TOTAL_PORTS];    // 1 = report this port, 0 = silence
+byte previousPINs[TOTAL_PORTS];  // previous 8 bits sent
 
 /* pins configuration */
-byte portConfigInputs[TOTAL_PORTS]; // each bit: 1 = pin in INPUT, 0 = anything else
+byte portConfigInputs[TOTAL_PORTS];  // each bit: 1 = pin in INPUT, 0 = anything else
 
 /* timer variables */
-unsigned long currentMillis;        // store the current value from millis()
-unsigned long previousMillis;       // for comparison with currentMillis
-unsigned int samplingInterval = 19; // how often to run the main loop (in ms)
+unsigned long currentMillis;         // store the current value from millis()
+unsigned long previousMillis;        // for comparison with currentMillis
+unsigned int samplingInterval = 19;  // how often to run the main loop (in ms)
 
 /* i2c data */
 struct i2c_device_info {
@@ -97,11 +97,10 @@ boolean isResetting = false;
 // of the Arduino IDE.
 void setPinModeCallback(byte, int);
 void reportAnalogCallback(byte analogPin, int value);
-void sysexCallback(byte, byte, byte*);
+void sysexCallback(byte, byte, byte *);
 
 /* utility functions */
-void wireWrite(byte data)
-{
+void wireWrite(byte data) {
 #if ARDUINO >= 100
   Wire.write((byte)data);
 #else
@@ -109,8 +108,7 @@ void wireWrite(byte data)
 #endif
 }
 
-byte wireRead(void)
-{
+byte wireRead(void) {
 #if ARDUINO >= 100
   return Wire.read();
 #else
@@ -122,8 +120,7 @@ byte wireRead(void)
  * FUNCTIONS
  *============================================================================*/
 
-void attachServo(byte pin, int minPulse, int maxPulse)
-{
+void attachServo(byte pin, int minPulse, int maxPulse) {
   if (servoCount < MAX_SERVOS) {
     // reuse indexes of detached servos until all have been reallocated
     if (detachedServoCount > 0) {
@@ -143,8 +140,7 @@ void attachServo(byte pin, int minPulse, int maxPulse)
   }
 }
 
-void detachServo(byte pin)
-{
+void detachServo(byte pin) {
   servos[servoPinMap[pin]].detach();
   // if we're detaching the last servo, decrement the count
   // otherwise store the index of the detached servo
@@ -160,8 +156,7 @@ void detachServo(byte pin)
   servoPinMap[pin] = 255;
 }
 
-void enableI2CPins()
-{
+void enableI2CPins() {
   byte i;
   // is there a faster way to do this? would probaby require importing
   // Arduino.h to get SCL and SDA pins
@@ -191,7 +186,7 @@ void readAndReportData(byte address, int theRegister, byte numBytes, byte stopTX
   if (theRegister != I2C_REGISTER_NOT_SPECIFIED) {
     Wire.beginTransmission(address);
     wireWrite((byte)theRegister);
-    Wire.endTransmission(stopTX); // default = true
+    Wire.endTransmission(stopTX);  // default = true
     // do not set a value of 0
     if (i2cReadDelayTime > 0) {
       // delay is necessary for some devices such as WiiNunchuck
@@ -222,8 +217,7 @@ void readAndReportData(byte address, int theRegister, byte numBytes, byte stopTX
   Firmata.sendSysex(SYSEX_I2C_REPLY, numBytes + 2, i2cRxData);
 }
 
-void outputPort(byte portNumber, byte portValue, byte forceSend)
-{
+void outputPort(byte portNumber, byte portValue, byte forceSend) {
   // pins not configured as INPUT are cleared to zeros
   portValue = portValue & portConfigInputs[portNumber];
   // only send if the value is different than previously sent
@@ -236,8 +230,7 @@ void outputPort(byte portNumber, byte portValue, byte forceSend)
 /* -----------------------------------------------------------------------------
  * check all the active digital inputs for change of state, then add any events
  * to the Serial output queue using Serial.print() */
-void checkDigitalInputs(void)
-{
+void checkDigitalInputs(void) {
   /* Using non-looping code allows constants to be given to readPort().
    * The compiler will apply substantial optimizations if the inputs
    * to readPort() are compile-time constants. */
@@ -263,8 +256,7 @@ void checkDigitalInputs(void)
 /* sets the pin mode to the correct state and sets the relevant bits in the
  * two bit-arrays that track Digital I/O and PWM status
  */
-void setPinModeCallback(byte pin, int mode)
-{
+void setPinModeCallback(byte pin, int mode) {
   if (Firmata.getPinMode(pin) == PIN_MODE_IGNORE)
     return;
 
@@ -279,7 +271,7 @@ void setPinModeCallback(byte pin, int mode)
     }
   }
   if (IS_PIN_ANALOG(pin)) {
-    reportAnalogCallback(PIN_TO_ANALOG(pin), mode == PIN_MODE_ANALOG ? 1 : 0); // turn on/off reporting
+    reportAnalogCallback(PIN_TO_ANALOG(pin), mode == PIN_MODE_ANALOG ? 1 : 0);  // turn on/off reporting
   }
   if (IS_PIN_DIGITAL(pin)) {
     if (mode == INPUT || mode == PIN_MODE_PULLUP) {
@@ -293,10 +285,10 @@ void setPinModeCallback(byte pin, int mode)
     case PIN_MODE_ANALOG:
       if (IS_PIN_ANALOG(pin)) {
         if (IS_PIN_DIGITAL(pin)) {
-          pinMode(PIN_TO_DIGITAL(pin), INPUT);    // disable output driver
+          pinMode(PIN_TO_DIGITAL(pin), INPUT);  // disable output driver
 #if ARDUINO <= 100
           // deprecated since Arduino 1.0.1 - TODO: drop support in Firmata 2.6
-          digitalWrite(PIN_TO_DIGITAL(pin), LOW); // disable internal pull-ups
+          digitalWrite(PIN_TO_DIGITAL(pin), LOW);  // disable internal pull-ups
 #endif
         }
         Firmata.setPinMode(pin, PIN_MODE_ANALOG);
@@ -304,10 +296,10 @@ void setPinModeCallback(byte pin, int mode)
       break;
     case INPUT:
       if (IS_PIN_DIGITAL(pin)) {
-        pinMode(PIN_TO_DIGITAL(pin), INPUT);    // disable output driver
+        pinMode(PIN_TO_DIGITAL(pin), INPUT);  // disable output driver
 #if ARDUINO <= 100
         // deprecated since Arduino 1.0.1 - TODO: drop support in Firmata 2.6
-        digitalWrite(PIN_TO_DIGITAL(pin), LOW); // disable internal pull-ups
+        digitalWrite(PIN_TO_DIGITAL(pin), LOW);  // disable internal pull-ups
 #endif
         Firmata.setPinMode(pin, INPUT);
       }
@@ -359,7 +351,7 @@ void setPinModeCallback(byte pin, int mode)
 #endif
       break;
     default:
-      Firmata.sendString("Unknown pin mode"); // TODO: put error msgs in EEPROM
+      Firmata.sendString("Unknown pin mode");  // TODO: put error msgs in EEPROM
   }
   // TODO: save status to EEPROM here, if changed
 }
@@ -370,8 +362,7 @@ void setPinModeCallback(byte pin, int mode)
  * Can only be used on pins configured as OUTPUT.
  * Cannot be used to enable pull-ups on Digital INPUT pins.
  */
-void setPinValueCallback(byte pin, int value)
-{
+void setPinValueCallback(byte pin, int value) {
   if (pin < TOTAL_PINS && IS_PIN_DIGITAL(pin)) {
     if (Firmata.getPinMode(pin) == OUTPUT) {
       Firmata.setPinState(pin, value);
@@ -380,8 +371,7 @@ void setPinValueCallback(byte pin, int value)
   }
 }
 
-void analogWriteCallback(byte pin, int value)
-{
+void analogWriteCallback(byte pin, int value) {
   if (pin < TOTAL_PINS) {
     switch (Firmata.getPinMode(pin)) {
       case PIN_MODE_SERVO:
@@ -398,8 +388,7 @@ void analogWriteCallback(byte pin, int value)
   }
 }
 
-void digitalWriteCallback(byte port, int value)
-{
+void digitalWriteCallback(byte port, int value) {
   byte pin, lastPin, pinValue, mask = 1, pinWriteMask = 0;
 
   if (port < TOTAL_PORTS) {
@@ -438,11 +427,10 @@ void digitalWriteCallback(byte port, int value)
  */
 //void FirmataClass::setAnalogPinReporting(byte pin, byte state) {
 //}
-void reportAnalogCallback(byte analogPin, int value)
-{
+void reportAnalogCallback(byte analogPin, int value) {
   if (analogPin < TOTAL_ANALOG_PINS) {
     if (value == 0) {
-      analogInputsToReport = analogInputsToReport & ~ (1 << analogPin);
+      analogInputsToReport = analogInputsToReport & ~(1 << analogPin);
     } else {
       analogInputsToReport = analogInputsToReport | (1 << analogPin);
       // prevent during system reset or all analog pin values will be reported
@@ -458,8 +446,7 @@ void reportAnalogCallback(byte analogPin, int value)
   // TODO: save status to EEPROM here, if changed
 }
 
-void reportDigitalCallback(byte port, int value)
-{
+void reportDigitalCallback(byte port, int value) {
   if (port < TOTAL_PORTS) {
     reportPINs[port] = (byte)value;
     // Send port value immediately. This is helpful when connected via
@@ -479,8 +466,7 @@ void reportDigitalCallback(byte port, int value)
  * SYSEX-BASED commands
  *============================================================================*/
 
-void sysexCallback(byte command, byte argc, byte *argv)
-{
+void sysexCallback(byte command, byte argc, byte *argv) {
   byte mode;
   byte stopTX;
   byte slaveAddress;
@@ -494,8 +480,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
       if (argv[1] & I2C_10BIT_ADDRESS_MODE_MASK) {
         Firmata.sendString("10-bit addressing not supported");
         return;
-      }
-      else {
+      } else {
         slaveAddress = argv[0];
       }
 
@@ -503,9 +488,8 @@ void sysexCallback(byte command, byte argc, byte *argv)
       // libraries that have not updated to add support for restart tx
       if (argv[1] & I2C_END_TX_MASK) {
         stopTX = I2C_RESTART_TX;
-      }
-      else {
-        stopTX = I2C_STOP_TX; // default
+      } else {
+        stopTX = I2C_STOP_TX;  // default
       }
 
       switch (mode) {
@@ -523,8 +507,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
             // a slave register is specified
             slaveRegister = argv[2] + (argv[3] << 7);
             data = argv[4] + (argv[5] << 7);  // bytes to read
-          }
-          else {
+          } else {
             // a slave register is NOT specified
             slaveRegister = I2C_REGISTER_NOT_SPECIFIED;
             data = argv[2] + (argv[3] << 7);  // bytes to read
@@ -541,8 +524,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
             // a slave register is specified
             slaveRegister = argv[2] + (argv[3] << 7);
             data = argv[4] + (argv[5] << 7);  // bytes to read
-          }
-          else {
+          } else {
             // a slave register is NOT specified
             slaveRegister = (int)I2C_REGISTER_NOT_SPECIFIED;
             data = argv[2] + (argv[3] << 7);  // bytes to read
@@ -646,7 +628,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
         }
         if (IS_PIN_ANALOG(pin)) {
           Firmata.write(PIN_MODE_ANALOG);
-          Firmata.write(10); // 10 = 10-bit resolution
+          Firmata.write(10);  // 10 = 10-bit resolution
         }
         if (IS_PIN_PWM(pin)) {
           Firmata.write(PIN_MODE_PWM);
@@ -703,8 +685,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
  * SETUP()
  *============================================================================*/
 
-void systemResetCallback()
-{
+void systemResetCallback() {
   isResetting = true;
 
   // initialize a defalt state
@@ -755,8 +736,7 @@ void systemResetCallback()
   isResetting = false;
 }
 
-void setup()
-{
+void setup() {
   Firmata.setFirmwareVersion(FIRMATA_FIRMWARE_MAJOR_VERSION, FIRMATA_FIRMWARE_MINOR_VERSION);
 
   Firmata.attach(ANALOG_MESSAGE, analogWriteCallback);
@@ -776,7 +756,7 @@ void setup()
 
   Firmata.begin(57600);
   while (!Serial) {
-    ; // wait for serial port to connect. Needed for ATmega32u4-based boards and Arduino 101
+    ;  // wait for serial port to connect. Needed for ATmega32u4-based boards and Arduino 101
   }
 
   systemResetCallback();  // reset to default config
@@ -785,8 +765,7 @@ void setup()
 /*==============================================================================
  * LOOP()
  *============================================================================*/
-void loop()
-{
+void loop() {
   byte pin, analogPin;
 
   /* DIGITALREAD - as fast as possible, check for changes and output them to the
@@ -824,12 +803,25 @@ void loop()
   serialFeature.update();
 #endif
 
-  Firmata.processInput(); // Handle incoming Firmata commands
-  
-  // Check and print the value for pin 16
-  int pin16Value = analogRead(16);  // Read analog value from pin 16
-  Serial.print("Pin 16: ");
-  Serial.println(pin16Value);  // Print the value to Serial Monitor
-  
-  delay(100);  // Delay to avoid flooding the serial output
+  if (!boardIdentified) {  // Only print if it hasn't already been printed
+    Serial.println("\nStandardFirmata loaded on:");
+
+#if defined(TEENSY41)
+    Serial.println("Teensy 4.1");
+#elif defined(TEENSY40)
+    Serial.println("Teensy 4.0");
+#elif defined(__MK66FX1M0__)  // Teensy 3.6
+    Serial.println("Teensy 3.6");
+#elif defined(__MK64FX512__)  // Teensy 3.5
+    Serial.println("Teensy 3.5");
+#elif defined(__MK20DX256__)  // Teensy 3.2/3.1
+    Serial.println("Teensy 3.2 / 3.1");
+#elif defined(__MK20DX128__)  // Teensy 3.0
+    Serial.println("Teensy 3.0");
+#else
+    Serial.println("Unknown Board");
+#endif
+
+    boardIdentified = true;  // Prevent further prints
+  }
 }

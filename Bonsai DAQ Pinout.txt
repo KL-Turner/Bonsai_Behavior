@@ -1,4 +1,4 @@
-SWGBE - <0,0,25,2048,25,5,100>
+SWGBE - <0,0,25,4048,25,10,0>
 
 <channel(0-3), for MCP4728
 waveform(0-4, 
@@ -46,4 +46,11 @@ Teensy 4.1 B - COM19
 17 SDA1 - MCP4725 CHIP A (0x062) TO BD200 (INPUT 1, Pin2) TO PIEZO A (Pin9+, Pin8-)
 18 SCA - MCP4725 CHIP B (0x063) TO BD200 (INPUT 2, Pin3) TO PIEZO B (Pin6+, Pin7-)
 19 SCL - MCP4725 CHIP B (0x063) TO BD200 (INPUT 2, Pin3) TO PIEZO B (Pin6+, Pin7-)
+
+Internal: M3 x 6
+Front: M3 x 8
+Fans: M3 x 16
+
+Sides: M3 x 16
+
 
