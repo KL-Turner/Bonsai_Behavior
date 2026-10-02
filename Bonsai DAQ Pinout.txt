@@ -1,0 +1,63 @@
+<<<<<<< HEAD
+SWGBE - <0,0,25,4048,25,10,0>
+=======
+SWGBE - Safe default - <0,0,25,2048,25,10,0>
+>>>>>>> 54e214db6da43ad01596175038503bbca8319c43
+
+<channel(0-3),
+waveform(0 = whale, 1 = square, 2 = ramp up, 3 = ramp down, 4 = pyramid),
+length of pulse (ms),
+amplitude (0-4095),
+inter-pulse-interval (ms),
+number repetitions,
+baseline period (ms)>
+
+-------------------------------------------------------------------------------------------
+Teensy 4.1 A
+
+12 DIGITAL INPUT - CAPACITIVE SENSOR A - DIRECT CONNECTION
+11 DIGITAL INPUT - CAPACITIVE SENSOR B - DIRECT CONNECTION
+26 DIGITAL OUTPUT - TRIGGER SOLENOID A - CHANNEL 3
+25 DIGITAL OUTPUT - TRIGGER SOLENOID B - CHANNEL 4
+9 DIGITAL OUTPUT - SYNC ANDOR CAMERA DAQ - CHANNEL 5
+10 DIGITAL OUTPUT - SYNC PRAIRIE VIEW DAQ - CHANNEL 6
+
+14 ANALOG INPUT (A0) - OPTO LED OUTPUT - CHANNEL 9
+15 ANALOG INPUT (A1) - PRAIRIE VIEW FRAME COUNTER - CHANNEL 1
+16 ANALOG INPUT (A2) - ANDOR FRAME COUNTER - CHANNEL 2
+17 ANALOG INPUT (A3) - SOLENOID A TRIGGER - DIGITAL OUTPUT 26
+18 ANALOG INPUT (A4) - SOLENOID B TRIGGER - DIGITAL OUTPUT 25
+19 ANALOG INPUT (A5) - ROTARY ENCODER - DIRECT CONNECTION
+20 ANALOG INPUT (A6) - PIEZO TRIGGER A - DIGITAL OUTPUT 33
+21 ANALOG INPUT (A7) - PIEZO TRIGGER B - DIGITAL OUTPUT 34
+22 ANALOG INPUT (A8) - CAPACITIVE SENSOR A - DIRECT CONNECTION
+23 ANALOG INPUT (A9) - CAPACITIVE SENSOR B - DIRECT CONNECTION
+
+-------------------------------------------------------------------------------------------
+
+Teensy 4.1 B
+
+30 DIGITAL INPUT - ANDOR FRAME COUNTER (1P)        - AlternatingFrameOpto v2: frameSource = FRAME_1P
+31 DIGITAL INPUT - PRAIRIE VIEW FRAME COUNTER (2P) - AlternatingFrameOpto v2: frameSource = FRAME_2P
+32 DIGITAL INPUT - SIMULATED WAVEFORM COUNTER (JUMP TO 31) - v1 ONLY. v2 simulates frames in software
+                   (frameSource = FRAME_SIMULATED); the 32->31 jumper is unused/unnecessary in v2.
+33 DIGITAL INPUT - PIEZO A
+34 DIGITAL INPUT - PIEZO B
+35 DIGITAL INPUT - OPTO LED (start-stim trigger; driven by Bonsai DIGITAL OUTPUT 35)
+36 DIGITAL OUTPUT - TRIGGER OPTO LED
+37 DIGITAL OUTPUT - PMT SHUTTER (Bruker High-Speed Shutter Control Box, "Uncaging" BNC)
+                    EMPIRICAL POLARITY: HIGH = CLOSED (PMTs protected), LOW = OPEN. The vendor
+                    documentation states the opposite -- do not trust it; verified on the rig.
+
+16 SCL1 - MCP4725 CHIP A (0x062) TO BD200 (INPUT 1, Pin2) TO PIEZO A (Pin9+, Pin8-)
+17 SDA1 - MCP4725 CHIP A (0x062) TO BD200 (INPUT 1, Pin2) TO PIEZO A (Pin9+, Pin8-)
+18 SCA - MCP4725 CHIP B (0x063) TO BD200 (INPUT 2, Pin3) TO PIEZO B (Pin6+, Pin7-)
+19 SCL - MCP4725 CHIP B (0x063) TO BD200 (INPUT 2, Pin3) TO PIEZO B (Pin6+, Pin7-)
+
+Internal: M3 x 6
+Front: M3 x 8
+Fans: M3 x 16
+
+Sides: M3 x 16
+
+
